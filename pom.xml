@@ -12,7 +12,7 @@
 	<artifactId>adapter</artifactId>
 	<version>1.0</version>
 	<name>adapter</name>
-	<description>Rule Set adapter</description>
+	<description>Application that manages Rule Sets on different systems providing consistency</description>
 
 	<properties>
 		<java.version>1.8</java.version>
