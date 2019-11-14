@@ -24,7 +24,7 @@ public class Controller {
 
     @GetMapping("/task_queue")
     public TaskQueueDto getTaskQueue() {
-        return taskQueue.getRequestQueueDto();
+        return taskQueue.getTaskQueueDto();
     }
 
     @GetMapping("/rule_set")

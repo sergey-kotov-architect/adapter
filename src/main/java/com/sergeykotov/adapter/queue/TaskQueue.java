@@ -21,7 +21,7 @@ public class TaskQueue {
         taskQueueProcessing.start();
     }
 
-    public TaskQueueDto getRequestQueueDto() {
+    public TaskQueueDto getTaskQueueDto() {
         TaskQueueDto taskQueueDto = new TaskQueueDto();
         taskQueueDto.setCapacity(CAPACITY);
         taskQueueDto.setTasks(queue.stream().map(Task::getName).map(TaskDto::new).collect(Collectors.toList()));
