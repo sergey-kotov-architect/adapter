@@ -14,7 +14,7 @@ public class RuleSetService {
     private static final List<RuleSet> ruleSets = new CopyOnWriteArrayList<>();
 
     public List<RuleSet> getRuleSets() {
-        log.info("extracting Rule Sets");
+        log.info("extracting Rule Sets...");
         try {
             Thread.sleep(2_000L);
         } catch (InterruptedException e) {
