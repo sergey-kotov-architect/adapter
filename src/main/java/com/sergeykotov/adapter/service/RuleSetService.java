@@ -21,7 +21,7 @@ public class RuleSetService {
             log.info("Rule Sets extraction has been interrupted");
             return Collections.emptyList();
         }
-        log.info("RuleSets have been extraction");
+        log.info("RuleSets have been extracted");
         return ruleSets;
     }
 
