@@ -14,9 +14,10 @@ import java.util.stream.Collectors;
 public class TaskQueue {
     private static final Logger log = Logger.getLogger(TaskQueue.class);
     private static final int CAPACITY = 10;
-    private static final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
 
-    static {
+    private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
+
+    public TaskQueue() {
         TaskQueueProcessing taskQueueProcessing = new TaskQueueProcessing(queue);
         taskQueueProcessing.start();
     }

@@ -1,59 +1,43 @@
 package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.RuleSet;
+import com.sergeykotov.adapter.system.System;
+import com.sergeykotov.adapter.system.System1;
+import com.sergeykotov.adapter.system.System2;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 
 @Service
 public class RuleSetService {
     private static final Logger log = Logger.getLogger(RuleSetService.class);
-    private static final List<RuleSet> ruleSets = new CopyOnWriteArrayList<>();
+    private final List<System> systems;
 
-    public List<RuleSet> getRuleSets() {
+    @Autowired
+    public RuleSetService(System1 system1, System2 system2) {
+        List<System> systems = new ArrayList<>();
+        systems.add(system1);
+        systems.add(system2);
+        this.systems = Collections.unmodifiableList(systems);
+    }
+
+    public Map<RuleSet, List<String>> getRuleSets() {
         log.info("extracting Rule Sets...");
-        try {
-            Thread.sleep(2_000L);
-        } catch (InterruptedException e) {
-            log.info("Rule Sets extraction has been interrupted");
-            return Collections.emptyList();
+        Map<RuleSet, List<String>> ruleSetSystemsMap = new HashMap<>();
+        for (System system : systems) {
+            //TODO: implement RuleSet extraction from system
         }
-        log.info("RuleSets have been extracted");
-        return ruleSets;
+        log.info(ruleSetSystemsMap.size() + " Rule Sets have been extracted");
+        return ruleSetSystemsMap;
     }
 
     public void create(RuleSet ruleSet) {
         log.info("creating Rule Set " + ruleSet + "...");
-        try {
-            Thread.sleep(10_000L);
-        } catch (InterruptedException e) {
-            log.info("Rule Set " + ruleSet + " creation has been interrupted");
-            return;
-        }
-        if (ruleSets.contains(ruleSet)) {
-            log.error("failed to create Rule Set " + ruleSet);
-            return;
-        }
-        ruleSets.add(ruleSet);
-        log.info("Rule Set " + ruleSet + " has been created");
     }
 
     public void delete(RuleSet ruleSet) {
         log.info("deleting Rule Set " + ruleSet + "...");
-        try {
-            Thread.sleep(5_000L);
-        } catch (InterruptedException e) {
-            log.info("Rule Set " + ruleSet + " deletion has been interrupted");
-            return;
-        }
-        boolean deleted = ruleSets.remove(ruleSet);
-        if (deleted) {
-            log.info("Rule Set " + ruleSet + " has been deleted");
-        } else {
-            log.info("failed to delete Rule Set " + ruleSet);
-        }
     }
 }

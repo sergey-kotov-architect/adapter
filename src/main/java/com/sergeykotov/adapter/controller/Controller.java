@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,7 +29,7 @@ public class Controller {
     }
 
     @GetMapping("/rule_set")
-    public List<RuleSet> getRuleSets() {
+    public Map<RuleSet, List<String>> getRuleSets() {
         return ruleSetService.getRuleSets();
     }
 
