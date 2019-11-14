@@ -5,14 +5,17 @@ import java.util.Objects;
 
 public class RuleSet {
     @NotEmpty
-    private final String name;
+    private String name;
 
-    public RuleSet(String name) {
-        this.name = name;
+    public RuleSet() {
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
