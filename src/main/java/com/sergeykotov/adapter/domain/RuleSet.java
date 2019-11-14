@@ -5,7 +5,6 @@ import javax.validation.constraints.NotEmpty;
 public class RuleSet {
     @NotEmpty
     private String name;
-    private boolean deployed;
 
     public RuleSet() {
     }
@@ -16,14 +15,6 @@ public class RuleSet {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isDeployed() {
-        return deployed;
-    }
-
-    public void setDeployed(boolean deployed) {
-        this.deployed = deployed;
     }
 
     @Override
