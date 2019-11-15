@@ -2,6 +2,7 @@ package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.RuleSet;
 import com.sergeykotov.adapter.domain.RuleSetsDto;
+import com.sergeykotov.adapter.exception.IntegrityException;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.System1;
 import com.sergeykotov.adapter.system.System2;
@@ -59,7 +60,7 @@ public class RuleSetService {
                     log.error(String.format(message, affectedSystem, ruleSet));
                 }
             }
-            return;
+            throw new IntegrityException();
         }
         log.info("Rule Set " + ruleSet + " has been created");
     }
@@ -81,7 +82,7 @@ public class RuleSetService {
                     log.error(String.format(message, affectedSystem, ruleSet));
                 }
             }
-            return;
+            throw new IntegrityException();
         }
         log.info("Rule Set " + ruleSet + " has been deleted");
     }
