@@ -3,6 +3,10 @@ package com.sergeykotov.adapter.queue;
 import com.sergeykotov.adapter.domain.RuleSet;
 import com.sergeykotov.adapter.exception.TaskQueueException;
 import com.sergeykotov.adapter.service.RuleSetService;
+import com.sergeykotov.adapter.task.CreateRuleSetTask;
+import com.sergeykotov.adapter.task.DeleteRuleSetTask;
+import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskDto;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 

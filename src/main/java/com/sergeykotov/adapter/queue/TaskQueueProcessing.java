@@ -1,5 +1,6 @@
 package com.sergeykotov.adapter.queue;
 
+import com.sergeykotov.adapter.task.Task;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;

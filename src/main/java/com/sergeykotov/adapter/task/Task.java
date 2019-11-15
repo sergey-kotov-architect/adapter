@@ -1,4 +1,4 @@
-package com.sergeykotov.adapter.queue;
+package com.sergeykotov.adapter.task;
 
 public interface Task {
     String getName();

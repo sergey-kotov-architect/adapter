@@ -1,5 +1,7 @@
 package com.sergeykotov.adapter.queue;
 
+import com.sergeykotov.adapter.task.TaskDto;
+
 import java.util.List;
 
 public class TaskQueueDto {
