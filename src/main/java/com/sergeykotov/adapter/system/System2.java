@@ -27,4 +27,9 @@ public class System2 implements System {
     public boolean deleteRuleSet(RuleSet ruleSet) {
         return false;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
