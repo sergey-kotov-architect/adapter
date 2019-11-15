@@ -4,12 +4,14 @@ import com.sergeykotov.adapter.domain.RuleSet;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class System1 implements System {
     private static final Logger log = Logger.getLogger(System1.class);
+
+    private List<RuleSet> ruleSets = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -18,17 +20,33 @@ public class System1 implements System {
 
     @Override
     public List<RuleSet> getRuleSets() {
-        return Collections.emptyList();
+        log.info("extracting Rule Sets...");
+        log.info(ruleSets.size() + " Rule Sets have been extracted");
+        return ruleSets;
     }
 
     @Override
     public boolean createRuleSet(RuleSet ruleSet) {
-        return false;
+        log.info("creating Rule Set " + ruleSet + "...");
+        if (ruleSets.contains(ruleSet)) {
+            log.error("failed to create Rule Set " + ruleSet);
+            return false;
+        }
+        ruleSets.add(ruleSet);
+        log.info("Rule Set " + ruleSet + " has been created");
+        return true;
     }
 
     @Override
     public boolean deleteRuleSet(RuleSet ruleSet) {
-        return false;
+        log.info("deleting Rule Set " + ruleSet + "...");
+        boolean deleted = ruleSets.remove(ruleSet);
+        if (!deleted) {
+            log.error("failed to delete Rule Set " + ruleSet);
+            return false;
+        }
+        log.info("Rule Set " + ruleSet + " has been deleted");
+        return true;
     }
 
     @Override
