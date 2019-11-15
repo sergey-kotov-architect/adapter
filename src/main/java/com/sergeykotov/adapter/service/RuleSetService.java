@@ -49,7 +49,12 @@ public class RuleSetService {
             boolean created = system.createRuleSet(ruleSet);
             if (!created) {
                 log.error("failed to create Rule Set " + ruleSet + " on system " + system);
-                affectedSystems.forEach(s -> s.deleteRuleSet(ruleSet));
+                for (System affectedSystem : affectedSystems) {
+                    boolean deleted = affectedSystem.deleteRuleSet(ruleSet);
+                    if (!deleted) {
+                        log.error("integrity has been violated");
+                    }
+                }
                 return;
             }
             affectedSystems.add(system);
@@ -64,7 +69,12 @@ public class RuleSetService {
             boolean deleted = system.deleteRuleSet(ruleSet);
             if (!deleted) {
                 log.error("failed to delete Rule Set " + ruleSet + " on system " + system);
-                affectedSystems.forEach(s -> s.createRuleSet(ruleSet));
+                for (System affectedSystem : affectedSystems) {
+                    boolean created = affectedSystem.createRuleSet(ruleSet);
+                    if (!created) {
+                        log.error("integrity has been violated");
+                    }
+                }
                 return;
             }
             affectedSystems.add(system);
