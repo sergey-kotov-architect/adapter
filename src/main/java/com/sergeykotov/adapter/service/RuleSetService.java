@@ -2,7 +2,6 @@ package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.RuleSet;
 import com.sergeykotov.adapter.domain.RuleSetsDto;
-import com.sergeykotov.adapter.exception.IntegrityException;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.System1;
 import com.sergeykotov.adapter.system.System2;
