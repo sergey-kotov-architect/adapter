@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -21,6 +22,12 @@ public class System2 implements System {
     @Override
     public List<RuleSet> getRuleSets() {
         log.info("extracting Rule Sets...");
+        try {
+            Thread.sleep(2_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("Rule Set extraction has been interrupted");
+            return Collections.emptyList();
+        }
         log.info(ruleSets.size() + " Rule Sets have been extracted");
         return ruleSets;
     }
@@ -28,6 +35,12 @@ public class System2 implements System {
     @Override
     public boolean createRuleSet(RuleSet ruleSet) {
         log.info("creating Rule Set " + ruleSet + "...");
+        try {
+            Thread.sleep(15_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("Rule Set creation has been interrupted");
+            return false;
+        }
         if (ruleSets.contains(ruleSet)) {
             log.error("failed to create Rule Set " + ruleSet);
             return false;
@@ -40,6 +53,12 @@ public class System2 implements System {
     @Override
     public boolean deleteRuleSet(RuleSet ruleSet) {
         log.info("deleting Rule Set " + ruleSet + "...");
+        try {
+            Thread.sleep(10_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("Rule Set deletion has been interrupted");
+            return false;
+        }
         boolean deleted = ruleSets.remove(ruleSet);
         if (!deleted) {
             log.error("failed to delete Rule Set " + ruleSet);
