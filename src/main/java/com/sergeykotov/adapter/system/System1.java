@@ -59,10 +59,6 @@ public class System1 implements System {
             log.error("Rule Set deletion has been interrupted");
             return false;
         }
-        if (ruleSets.contains(ruleSet)) {
-            log.error("failed to create Rule Set " + ruleSet);
-            return false;
-        }
         boolean deleted = ruleSets.remove(ruleSet);
         if (!deleted) {
             log.error("failed to delete Rule Set " + ruleSet);
