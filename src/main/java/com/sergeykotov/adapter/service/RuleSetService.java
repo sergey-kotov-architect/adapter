@@ -1,6 +1,7 @@
 package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.RuleSet;
+import com.sergeykotov.adapter.domain.RuleSetsDto;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.System1;
 import com.sergeykotov.adapter.system.System2;
@@ -23,7 +24,7 @@ public class RuleSetService {
         this.systems = Collections.unmodifiableList(systems);
     }
 
-    public Map<RuleSet, List<String>> getRuleSets() {
+    public RuleSetsDto getRuleSets() {
         log.info("extracting Rule Sets...");
         Map<RuleSet, List<String>> ruleSetSystemsMap = new HashMap<>();
         for (System system : systems) {
@@ -36,7 +37,9 @@ public class RuleSetService {
             }
         }
         log.info(ruleSetSystemsMap.size() + " Rule Sets have been extracted");
-        return ruleSetSystemsMap;
+        RuleSetsDto ruleSetsDto = new RuleSetsDto();
+        ruleSetsDto.setRuleSetSystemsMap(ruleSetSystemsMap);
+        return ruleSetsDto;
     }
 
     public void create(RuleSet ruleSet) {
