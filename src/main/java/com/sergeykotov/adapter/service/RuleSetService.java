@@ -44,26 +44,30 @@ public class RuleSetService {
 
     public void create(RuleSet ruleSet) {
         log.info("creating Rule Set " + ruleSet + "...");
+        List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
             boolean created = system.createRuleSet(ruleSet);
             if (!created) {
                 log.error("failed to create Rule Set " + ruleSet + " on system " + system);
-                //TODO: delete created Rule Set on previous systems
+                affectedSystems.forEach(s -> s.deleteRuleSet(ruleSet));
                 return;
             }
+            affectedSystems.add(system);
         }
         log.info("Rule Set " + ruleSet + " has been created");
     }
 
     public void delete(RuleSet ruleSet) {
         log.info("deleting Rule Set " + ruleSet + "...");
+        List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
             boolean deleted = system.deleteRuleSet(ruleSet);
             if (!deleted) {
                 log.error("failed to delete Rule Set " + ruleSet + " on system " + system);
-                //TODO: restore deleted Rule Set on previous systems
+                affectedSystems.forEach(s -> s.createRuleSet(ruleSet));
                 return;
             }
+            affectedSystems.add(system);
         }
         log.info("Rule Set " + ruleSet + " has been deleted");
     }
