@@ -27,7 +27,13 @@ public class RuleSetService {
         log.info("extracting Rule Sets...");
         Map<RuleSet, List<String>> ruleSetSystemsMap = new HashMap<>();
         for (System system : systems) {
-            //TODO: implement RuleSet extraction from system
+            List<RuleSet> ruleSets = system.getRuleSets();
+            for (RuleSet ruleSet : ruleSets) {
+                ruleSetSystemsMap.putIfAbsent(ruleSet, new ArrayList<>());
+                List<String> ruleSetSystems = ruleSetSystemsMap.get(ruleSet);
+                ruleSetSystems.add(system.getName());
+                ruleSetSystemsMap.put(ruleSet, ruleSetSystems);
+            }
         }
         log.info(ruleSetSystemsMap.size() + " Rule Sets have been extracted");
         return ruleSetSystemsMap;
