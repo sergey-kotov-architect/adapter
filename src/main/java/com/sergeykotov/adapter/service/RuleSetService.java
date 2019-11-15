@@ -47,17 +47,19 @@ public class RuleSetService {
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
             boolean created = system.createRuleSet(ruleSet);
-            if (!created) {
-                log.error("failed to create Rule Set " + ruleSet + " on system " + system);
-                for (System affectedSystem : affectedSystems) {
-                    boolean deleted = affectedSystem.deleteRuleSet(ruleSet);
-                    if (!deleted) {
-                        log.error("integrity has been violated");
-                    }
-                }
-                return;
+            if (created) {
+                affectedSystems.add(system);
+                continue;
             }
-            affectedSystems.add(system);
+            log.error("failed to create Rule Set " + ruleSet + " on system " + system);
+            for (System affectedSystem : affectedSystems) {
+                boolean deleted = affectedSystem.deleteRuleSet(ruleSet);
+                if (!deleted) {
+                    String message = "integrity has been violated: system %s must not contain Rule Set %s";
+                    log.error(String.format(message, affectedSystem, ruleSet));
+                }
+            }
+            return;
         }
         log.info("Rule Set " + ruleSet + " has been created");
     }
@@ -67,17 +69,19 @@ public class RuleSetService {
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
             boolean deleted = system.deleteRuleSet(ruleSet);
-            if (!deleted) {
-                log.error("failed to delete Rule Set " + ruleSet + " on system " + system);
-                for (System affectedSystem : affectedSystems) {
-                    boolean created = affectedSystem.createRuleSet(ruleSet);
-                    if (!created) {
-                        log.error("integrity has been violated");
-                    }
-                }
-                return;
+            if (deleted) {
+                affectedSystems.add(system);
+                continue;
             }
-            affectedSystems.add(system);
+            log.error("failed to delete Rule Set " + ruleSet + " on system " + system);
+            for (System affectedSystem : affectedSystems) {
+                boolean created = affectedSystem.createRuleSet(ruleSet);
+                if (!created) {
+                    String message = "integrity has been violated: system %s must contain Rule Set %s";
+                    log.error(String.format(message, affectedSystem, ruleSet));
+                }
+            }
+            return;
         }
         log.info("Rule Set " + ruleSet + " has been deleted");
     }
