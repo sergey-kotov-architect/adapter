@@ -17,3 +17,4 @@ Application that manages Rule Sets on different systems providing consistency
 * Git
 * IntelliJ IDEA
 * Insomnia REST Client
+* Visual VM
