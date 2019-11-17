@@ -7,6 +7,7 @@ import java.util.List;
 public class TaskQueueDto {
     private int capacity;
     private int size;
+    private TaskDto task;
     private List<TaskDto> tasks;
 
     public TaskQueueDto() {
@@ -26,6 +27,14 @@ public class TaskQueueDto {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public TaskDto getTask() {
+        return task;
+    }
+
+    public void setTask(TaskDto task) {
+        this.task = task;
     }
 
     public List<TaskDto> getTasks() {

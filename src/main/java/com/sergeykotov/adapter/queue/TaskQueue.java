@@ -21,16 +21,21 @@ public class TaskQueue {
     private static final int CAPACITY = 10;
 
     private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
+    private final TaskQueueProcessing taskQueueProcessing = new TaskQueueProcessing(queue);
 
     public TaskQueue() {
-        new TaskQueueProcessing(queue).start();
+        taskQueueProcessing.start();
     }
 
     public TaskQueueDto getTaskQueueDto() {
         List<TaskDto> tasks = queue.stream().map(Task::getTaskDto).collect(Collectors.toList());
+        Task task = taskQueueProcessing.getTask();
+        TaskDto taskDto = (task != null) ? task.getTaskDto() : null;
+
         TaskQueueDto taskQueueDto = new TaskQueueDto();
         taskQueueDto.setCapacity(CAPACITY);
         taskQueueDto.setSize(tasks.size());
+        taskQueueDto.setTask(taskDto);
         taskQueueDto.setTasks(tasks);
         return taskQueueDto;
     }

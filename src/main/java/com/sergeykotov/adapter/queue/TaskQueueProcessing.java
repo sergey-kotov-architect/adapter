@@ -10,6 +10,7 @@ public class TaskQueueProcessing extends Thread {
     private static final String NAME = "task-queue-processing";
 
     private final BlockingQueue<Task> queue;
+    private Task task;
 
     public TaskQueueProcessing(BlockingQueue<Task> queue) {
         this.queue = queue;
@@ -17,11 +18,14 @@ public class TaskQueueProcessing extends Thread {
         setDaemon(true);
     }
 
+    public Task getTask() {
+        return task;
+    }
+
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             log.info("waiting for a new task in the queue...");
-            Task task;
             try {
                 task = queue.take();
             } catch (InterruptedException e) {
