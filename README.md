@@ -1,18 +1,20 @@
-Application that manages Rule Sets on different systems providing consistency
+Web-service that provides REST API to manage business rules on different systems
 
-# Functions
-* get the task queue state
-* extract Rule Sets from the systems
-* create a Rule Set on the systems
-* delete a Rule Set from the systems
+### Functions
+* extract rules from the systems
+* create a rule on the systems
+* update a rule on the systems
+* delete a rule from the systems
+* extract task queue and currently executing task from the queue
+* verify integrity
+* restore integrity
 
-# Technologies and tools
-* Message Queue
-* Concurrency
+### Technologies and tools
 * Java 8
 * Spring framework (Boot, Web, Test, Actuator)
-* REST API
-* log4j
+* Concurrency
+* Message Queue
+* Log4j
 * Maven
 * Git
 * IntelliJ IDEA
