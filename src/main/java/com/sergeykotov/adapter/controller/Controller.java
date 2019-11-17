@@ -23,11 +23,6 @@ public class Controller {
         this.ruleService = ruleService;
     }
 
-    @GetMapping("/queue")
-    public TaskQueueDto getTaskQueue() {
-        return taskQueue.getTaskQueueDto();
-    }
-
     @GetMapping("/rule")
     public RulesDto getRuleSets() {
         return ruleService.getRulesDto();
@@ -61,5 +56,10 @@ public class Controller {
     @PostMapping("/integrity")
     public void restoreIntegrity() {
         taskQueue.submitRestoreIntegrityTask(ruleService);
+    }
+
+    @GetMapping("/queue")
+    public TaskQueueDto getTaskQueueDto() {
+        return taskQueue.getTaskQueueDto();
     }
 }

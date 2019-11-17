@@ -5,9 +5,9 @@ Web-service that provides REST API to manage business rules on different systems
 * create a rule on the systems
 * update a rule on the systems
 * delete a rule from the systems
-* extract task queue and currently executing task from the queue
 * verify integrity
 * restore integrity
+* extract task queue and currently executing task from the queue
 
 ### Technologies and tools
 * Java 8
