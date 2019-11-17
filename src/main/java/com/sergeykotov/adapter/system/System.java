@@ -9,7 +9,11 @@ public interface System {
 
     List<Rule> getRules();
 
-    boolean createRuleSet(Rule rule);
+    Rule getRule(long id);
 
-    boolean deleteRuleSet(Rule rule);
+    boolean createRule(Rule rule);
+
+    boolean updateRule(Rule rule);
+
+    boolean deleteRule(Rule rule);
 }

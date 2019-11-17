@@ -3,6 +3,7 @@ package com.sergeykotov.adapter.service;
 import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.domain.RulesDto;
+import com.sergeykotov.adapter.exception.ExtractionException;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.System1;
 import com.sergeykotov.adapter.system.System2;
@@ -45,6 +46,15 @@ public class RuleService {
     }
 
     public Rule getRule(long id) {
+        log.info("extracting rule by ID " + id + "...");
+        //TODO: implement rule extraction by ID
+        try {
+            Thread.sleep(1_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("rule extraction by ID " + id + " has been interrupted");
+            throw new ExtractionException();
+        }
+        log.info("rule has been extracted by ID " + id);
         return null;
     }
 
@@ -52,14 +62,14 @@ public class RuleService {
         log.info("creating rule " + rule + "...");
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
-            boolean created = system.createRuleSet(rule);
+            boolean created = system.createRule(rule);
             if (created) {
                 affectedSystems.add(system);
                 continue;
             }
             log.error("failed to create rule " + rule + " on system " + system);
             for (System affectedSystem : affectedSystems) {
-                boolean deleted = affectedSystem.deleteRuleSet(rule);
+                boolean deleted = affectedSystem.deleteRule(rule);
                 if (!deleted) {
                     String message = "integrity has been violated: system %s must not contain rule %s";
                     log.error(String.format(message, affectedSystem, rule));
@@ -71,21 +81,42 @@ public class RuleService {
     }
 
     public void update(Rule rule) {
-
+        log.info("updating rule " + rule + "...");
+        Map<System, Rule> affectedSystems = new HashMap<>(systems.size() * 2);
+        for (System system : systems) {
+            boolean updated = system.updateRule(rule);
+            if (updated) {
+                Rule previousRule = getRule(rule.getId());
+                affectedSystems.put(system, previousRule);
+                continue;
+            }
+            log.error("failed to update rule " + rule + " on system " + system);
+            for (Map.Entry<System, Rule> entry : affectedSystems.entrySet()) {
+                System affectedSystem = entry.getKey();
+                Rule previousRule = entry.getValue();
+                boolean restored = affectedSystem.updateRule(previousRule);
+                if (!restored) {
+                    String message = "integrity has been violated: system %s has rule %s in invalid state";
+                    log.error(String.format(message, affectedSystem, rule));
+                }
+            }
+            return;
+        }
+        log.info("rule " + rule + " has been updated");
     }
 
     public void delete(Rule rule) {
         log.info("deleting rule " + rule + "...");
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
-            boolean deleted = system.deleteRuleSet(rule);
+            boolean deleted = system.deleteRule(rule);
             if (deleted) {
                 affectedSystems.add(system);
                 continue;
             }
             log.error("failed to delete rule " + rule + " on system " + system);
             for (System affectedSystem : affectedSystems) {
-                boolean created = affectedSystem.createRuleSet(rule);
+                boolean created = affectedSystem.createRule(rule);
                 if (!created) {
                     String message = "integrity has been violated: system %s must contain rule %s";
                     log.error(String.format(message, affectedSystem, rule));
@@ -97,6 +128,16 @@ public class RuleService {
     }
 
     public IntegrityDto verifyIntegrity() {
+        log.info("verifying integrity...");
+        //TODO: implement integrity verification
+        try {
+            Thread.sleep(3_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("integrity verification has been interrupted");
+            throw new ExtractionException();
+        }
+        log.info("integrity has been verified");
+
         String time = LocalDateTime.now().toString();
         String message = "the business rules are consistent among the systems";
         IntegrityDto integrityDto = new IntegrityDto();
@@ -107,6 +148,14 @@ public class RuleService {
     }
 
     public void restoreIntegrity() {
-
+        log.info("restoring integrity...");
+        //TODO: implement integrity restoration
+        try {
+            Thread.sleep(15_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("integrity extraction has been interrupted");
+            return;
+        }
+        log.info("integrity has been restored");
     }
 }

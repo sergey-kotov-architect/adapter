@@ -26,46 +26,69 @@ public class System1 implements System {
         try {
             Thread.sleep(2_000L); //latency simulation
         } catch (InterruptedException e) {
-            log.error("Rule Set extraction has been interrupted");
+            log.error("rule extraction has been interrupted");
             throw new ExtractionException();
         }
-        log.info(rules.size() + " Rule Sets have been extracted");
+        log.info(rules.size() + " rule have been extracted");
         return rules;
     }
 
     @Override
-    public boolean createRuleSet(Rule rule) {
-        log.info("creating Rule Set " + rule + "...");
+    public Rule getRule(long id) {
+        log.info("extracting rule by ID " + id + "...");
+        Rule rule = rules.stream().filter(r -> r.getId() == id).findAny().orElseThrow(ExtractionException::new);
+        log.info("rule has been extracted by ID " + id);
+        return rule;
+    }
+
+    @Override
+    public boolean createRule(Rule rule) {
+        log.info("creating rule " + rule + "...");
         try {
             Thread.sleep(15_000L); //latency simulation
         } catch (InterruptedException e) {
-            log.error("Rule Set creation has been interrupted");
+            log.error("rule creation has been interrupted");
             return false;
         }
         if (rules.contains(rule)) {
-            log.error("failed to create Rule Set " + rule);
+            log.error("failed to create rule " + rule);
             return false;
         }
         rules.add(rule);
-        log.info("Rule Set " + rule + " has been created");
+        log.info("rule " + rule + " has been created");
         return true;
     }
 
     @Override
-    public boolean deleteRuleSet(Rule rule) {
-        log.info("deleting Rule Set " + rule + "...");
+    public boolean updateRule(Rule rule) {
+        log.info("updating rule " + rule + "...");
+        try {
+            Thread.sleep(15_000L); //latency simulation
+        } catch (InterruptedException e) {
+            log.error("rule update has been interrupted");
+            return false;
+        }
+        Rule existingRule = getRule(rule.getId());
+        existingRule.setNote(rule.getNote());
+        log.info("rule " + rule + " has been updated");
+        return true;
+    }
+
+    @Override
+    public boolean deleteRule(Rule rule) {
+        log.info("deleting rule " + rule + "...");
         try {
             Thread.sleep(10_000L); //latency simulation
         } catch (InterruptedException e) {
-            log.error("Rule Set deletion has been interrupted");
+            log.error("rule deletion has been interrupted");
             return false;
         }
         boolean deleted = rules.remove(rule);
         if (!deleted) {
-            log.error("failed to delete Rule Set " + rule);
+            log.error("failed to delete rule " + rule);
             return false;
         }
-        log.info("Rule Set " + rule + " has been deleted");
+        log.info("rule " + rule + " has been deleted");
         return true;
     }
 
