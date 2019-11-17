@@ -7,23 +7,27 @@ import java.util.concurrent.BlockingQueue;
 
 public class TaskQueueProcessing extends Thread {
     private static final Logger log = Logger.getLogger(TaskQueueProcessing.class);
+    private static final String NAME = "task-queue-processing";
+
     private final BlockingQueue<Task> queue;
 
     public TaskQueueProcessing(BlockingQueue<Task> queue) {
         this.queue = queue;
-        setName("task-queue-processing");
+        setName(NAME);
         setDaemon(true);
     }
 
     @Override
     public void run() {
-        try {
-            while (true) {
-                Task task = queue.take();
-                task.execute();
+        while (!Thread.currentThread().isInterrupted()) {
+            Task task;
+            try {
+                task = queue.take();
+            } catch (InterruptedException e) {
+                log.error("execution of tasks from the queue has been interrupted");
+                return;
             }
-        } catch (InterruptedException e) {
-            log.error("execution of tasks from the queue has been interrupted");
+            task.execute();
         }
     }
 }
