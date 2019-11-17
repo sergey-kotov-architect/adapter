@@ -1,10 +1,11 @@
 package com.sergeykotov.adapter.controller;
 
-import com.sergeykotov.adapter.domain.RuleSet;
-import com.sergeykotov.adapter.domain.RuleSetsDto;
+import com.sergeykotov.adapter.domain.IntegrityDto;
+import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.domain.RulesDto;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.queue.TaskQueueDto;
-import com.sergeykotov.adapter.service.RuleSetService;
+import com.sergeykotov.adapter.service.RuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,31 +15,51 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1")
 public class Controller {
     private final TaskQueue taskQueue;
-    private final RuleSetService ruleSetService;
+    private final RuleService ruleService;
 
     @Autowired
-    public Controller(TaskQueue taskQueue, RuleSetService ruleSetService) {
+    public Controller(TaskQueue taskQueue, RuleService ruleService) {
         this.taskQueue = taskQueue;
-        this.ruleSetService = ruleSetService;
+        this.ruleService = ruleService;
     }
 
-    @GetMapping("/task_queue")
+    @GetMapping("/queue")
     public TaskQueueDto getTaskQueue() {
         return taskQueue.getTaskQueueDto();
     }
 
-    @GetMapping("/rule_set")
-    public RuleSetsDto getRuleSets() {
-        return ruleSetService.getRuleSetsDto();
+    @GetMapping("/rule")
+    public RulesDto getRuleSets() {
+        return ruleService.getRulesDto();
     }
 
-    @PostMapping("/rule_set")
-    public void createRuleSet(@RequestBody @Valid RuleSet ruleSet) {
-        taskQueue.submitCreateRuleSetTask(ruleSetService, ruleSet);
+    @GetMapping("/rule/{id}")
+    public Rule getRule(@PathVariable long id) {
+        return ruleService.getRule(id);
     }
 
-    @DeleteMapping("/rule_set")
-    public void deleteRuleSet(@RequestBody @Valid RuleSet ruleSet) {
-        taskQueue.submitDeleteRuleSetTask(ruleSetService, ruleSet);
+    @PostMapping("/rule")
+    public void createRule(@RequestBody @Valid Rule rule) {
+        taskQueue.submitCreateRuleTask(ruleService, rule);
+    }
+
+    @PutMapping("/rule")
+    public void updateRule(@RequestBody @Valid Rule rule) {
+        taskQueue.submitUpdateRuleTask(ruleService, rule);
+    }
+
+    @DeleteMapping("/rule")
+    public void deleteRule(@RequestBody @Valid Rule rule) {
+        taskQueue.submitDeleteRuleTask(ruleService, rule);
+    }
+
+    @GetMapping("/integrity")
+    public IntegrityDto verifyIntegrity() {
+        return ruleService.verifyIntegrity();
+    }
+
+    @PostMapping("/integrity")
+    public void restoreIntegrity() {
+        taskQueue.submitRestoreIntegrityTask(ruleService);
     }
 }

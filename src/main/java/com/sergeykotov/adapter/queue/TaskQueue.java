@@ -1,12 +1,9 @@
 package com.sergeykotov.adapter.queue;
 
-import com.sergeykotov.adapter.domain.RuleSet;
+import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.TaskQueueException;
-import com.sergeykotov.adapter.service.RuleSetService;
-import com.sergeykotov.adapter.task.CreateRuleSetTask;
-import com.sergeykotov.adapter.task.DeleteRuleSetTask;
-import com.sergeykotov.adapter.task.Task;
-import com.sergeykotov.adapter.task.TaskDto;
+import com.sergeykotov.adapter.service.RuleService;
+import com.sergeykotov.adapter.task.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -40,13 +37,23 @@ public class TaskQueue {
         return taskQueueDto;
     }
 
-    public void submitCreateRuleSetTask(RuleSetService ruleSetService, RuleSet ruleSet) {
-        Task task = new CreateRuleSetTask(ruleSetService, ruleSet);
+    public void submitCreateRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new CreateRuleTask(ruleService, rule);
         submitTask(task);
     }
 
-    public void submitDeleteRuleSetTask(RuleSetService ruleSetService, RuleSet ruleSet) {
-        Task task = new DeleteRuleSetTask(ruleSetService, ruleSet);
+    public void submitUpdateRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new UpdateRuleTask(ruleService, rule);
+        submitTask(task);
+    }
+
+    public void submitDeleteRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new DeleteRuleTask(ruleService, rule);
+        submitTask(task);
+    }
+
+    public void submitRestoreIntegrityTask(RuleService ruleService) {
+        Task task = new RestoreIntegrityTask(ruleService);
         submitTask(task);
     }
 
