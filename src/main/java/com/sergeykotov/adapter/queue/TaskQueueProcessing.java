@@ -20,6 +20,7 @@ public class TaskQueueProcessing extends Thread {
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
+            log.info("waiting for a new task in the queue...");
             Task task;
             try {
                 task = queue.take();
@@ -27,6 +28,7 @@ public class TaskQueueProcessing extends Thread {
                 log.error("task queue processing has been interrupted");
                 return;
             }
+            log.info("a new task " + task + " has been taken from the queue");
             task.execute();
         }
         log.error("task queue processing has been interrupted");

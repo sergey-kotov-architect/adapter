@@ -26,4 +26,9 @@ public class DeleteRuleSetTask implements Task {
     public void execute() {
         ruleSetService.delete(ruleSet);
     }
+
+    @Override
+    public String toString() {
+        return getType() + " " + getName();
+    }
 }

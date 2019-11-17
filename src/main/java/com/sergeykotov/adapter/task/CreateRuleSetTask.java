@@ -26,4 +26,9 @@ public class CreateRuleSetTask implements Task {
     public void execute() {
         ruleSetService.create(ruleSet);
     }
+
+    @Override
+    public String toString() {
+        return getType() + " " + getName();
+    }
 }

@@ -8,8 +8,6 @@ import com.sergeykotov.adapter.task.DeleteRuleSetTask;
 import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskDto;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,14 +16,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 @Component
-@ConfigurationProperties
 public class TaskQueue {
     private static final Logger log = Logger.getLogger(TaskQueue.class);
+    private static final int CAPACITY = 10;
 
-    @Value("${queue.capacity:20}")
-    private int capacity;
-
-    private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(capacity);
+    private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
 
     public TaskQueue() {
         new TaskQueueProcessing(queue).start();
@@ -34,13 +29,13 @@ public class TaskQueue {
     public TaskQueueDto getTaskQueueDto() {
         List<TaskDto> tasks = queue.stream().map(Task::getTaskDto).collect(Collectors.toList());
         TaskQueueDto taskQueueDto = new TaskQueueDto();
-        taskQueueDto.setCapacity(capacity);
+        taskQueueDto.setCapacity(CAPACITY);
         taskQueueDto.setSize(tasks.size());
         taskQueueDto.setTasks(tasks);
         return taskQueueDto;
     }
 
-    public void submitRuleSetCreation(RuleSetService ruleSetService, RuleSet ruleSet) {
+    public void submitCreateRuleSetTask(RuleSetService ruleSetService, RuleSet ruleSet) {
         Task task = new CreateRuleSetTask(ruleSetService, ruleSet);
         boolean accepted = queue.offer(task);
         if (!accepted) {
@@ -50,7 +45,7 @@ public class TaskQueue {
         log.info("task to create Rule Set " + ruleSet + " has been submitted, queue size " + queue.size());
     }
 
-    public void submitRuleSetDeletion(RuleSetService ruleSetService, RuleSet ruleSet) {
+    public void submitDeleteRuleSetTask(RuleSetService ruleSetService, RuleSet ruleSet) {
         Task task = new DeleteRuleSetTask(ruleSetService, ruleSet);
         boolean accepted = queue.offer(task);
         if (!accepted) {
