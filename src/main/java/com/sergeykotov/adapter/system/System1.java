@@ -6,18 +6,18 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Component
 public class System1 implements System {
     private static final Logger log = Logger.getLogger(System1.class);
+    private static final String NAME = "System1";
 
     private List<RuleSet> ruleSets = new ArrayList<>();
 
     @Override
     public String getName() {
-        return "System1";
+        return NAME;
     }
 
     @Override

@@ -11,12 +11,13 @@ import java.util.List;
 @Component
 public class System2 implements System {
     private static final Logger log = Logger.getLogger(System2.class);
+    private static final String NAME = "System2";
 
     private List<RuleSet> ruleSets = new ArrayList<>();
 
     @Override
     public String getName() {
-        return "System2";
+        return NAME;
     }
 
     @Override
