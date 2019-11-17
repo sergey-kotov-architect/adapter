@@ -1,11 +1,11 @@
 package com.sergeykotov.adapter.system;
 
 import com.sergeykotov.adapter.domain.RuleSet;
+import com.sergeykotov.adapter.exception.ExtractionException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -26,7 +26,7 @@ public class System2 implements System {
             Thread.sleep(2_000L); //latency simulation
         } catch (InterruptedException e) {
             log.error("Rule Set extraction has been interrupted");
-            return Collections.emptyList();
+            throw new ExtractionException();
         }
         log.info(ruleSets.size() + " Rule Sets have been extracted");
         return ruleSets;
