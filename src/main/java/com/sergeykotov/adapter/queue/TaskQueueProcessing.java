@@ -24,10 +24,11 @@ public class TaskQueueProcessing extends Thread {
             try {
                 task = queue.take();
             } catch (InterruptedException e) {
-                log.error("execution of tasks from the queue has been interrupted");
+                log.error("task queue processing has been interrupted");
                 return;
             }
             task.execute();
         }
+        log.error("task queue processing has been interrupted");
     }
 }

@@ -34,11 +34,11 @@ public class Controller {
 
     @PostMapping("/rule_set")
     public void createRuleSet(@RequestBody @Valid RuleSet ruleSet) {
-        taskQueue.submitRuleSetCreation(ruleSet);
+        taskQueue.submitRuleSetCreation(ruleSetService, ruleSet);
     }
 
     @DeleteMapping("/rule_set")
     public void deleteRuleSet(@RequestBody @Valid RuleSet ruleSet) {
-        taskQueue.submitRuleSetDeletion(ruleSet);
+        taskQueue.submitRuleSetDeletion(ruleSetService, ruleSet);
     }
 }

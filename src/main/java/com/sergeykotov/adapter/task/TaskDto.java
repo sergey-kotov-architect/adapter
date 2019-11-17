@@ -1,13 +1,18 @@
 package com.sergeykotov.adapter.task;
 
 public class TaskDto {
+    private TaskType type;
     private String name;
 
     public TaskDto() {
     }
 
-    public TaskDto(String name) {
-        this.name = name;
+    public TaskType getType() {
+        return type;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
     }
 
     public String getName() {
