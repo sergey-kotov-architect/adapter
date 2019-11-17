@@ -37,21 +37,20 @@ public class TaskQueue {
 
     public void submitCreateRuleSetTask(RuleSetService ruleSetService, RuleSet ruleSet) {
         Task task = new CreateRuleSetTask(ruleSetService, ruleSet);
-        boolean accepted = queue.offer(task);
-        if (!accepted) {
-            log.error("failed to submit a task to create Rule Set " + ruleSet);
-            throw new TaskQueueException();
-        }
-        log.info("task to create Rule Set " + ruleSet + " has been submitted, queue size " + queue.size());
+        submitTask(task);
     }
 
     public void submitDeleteRuleSetTask(RuleSetService ruleSetService, RuleSet ruleSet) {
         Task task = new DeleteRuleSetTask(ruleSetService, ruleSet);
+        submitTask(task);
+    }
+
+    private void submitTask(Task task) {
         boolean accepted = queue.offer(task);
         if (!accepted) {
-            log.error("failed to submit a task to delete Rule Set " + ruleSet);
+            log.error("failed to submit task " + task);
             throw new TaskQueueException();
         }
-        log.info("task to delete Rule Set " + ruleSet + " has been submitted, queue size " + queue.size());
+        log.info("task " + task + " has been submitted, queue size " + queue.size());
     }
 }
