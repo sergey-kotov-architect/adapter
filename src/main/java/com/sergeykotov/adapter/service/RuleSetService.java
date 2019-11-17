@@ -24,7 +24,7 @@ public class RuleSetService {
         this.systems = Collections.unmodifiableList(systems);
     }
 
-    public RuleSetsDto getRuleSets() {
+    public RuleSetsDto getRuleSetsDto() {
         log.info("extracting Rule Sets...");
         Map<RuleSet, List<String>> ruleSetSystemsMap = new HashMap<>();
         for (System system : systems) {

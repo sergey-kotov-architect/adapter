@@ -2,14 +2,15 @@ package com.sergeykotov.adapter.task;
 
 import com.sergeykotov.adapter.domain.RuleSet;
 import com.sergeykotov.adapter.service.RuleSetService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DeleteRuleSetTask implements Task {
-    private final RuleSetService ruleSetService;
+    @Autowired
+    private RuleSetService ruleSetService;
     private final RuleSet ruleSet;
 
-    public DeleteRuleSetTask(RuleSet ruleSet, RuleSetService ruleSetService) {
+    public DeleteRuleSetTask(RuleSet ruleSet) {
         this.ruleSet = ruleSet;
-        this.ruleSetService = ruleSetService;
     }
 
     @Override

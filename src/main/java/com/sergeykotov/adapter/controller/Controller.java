@@ -29,16 +29,16 @@ public class Controller {
 
     @GetMapping("/rule_set")
     public RuleSetsDto getRuleSets() {
-        return ruleSetService.getRuleSets();
+        return ruleSetService.getRuleSetsDto();
     }
 
     @PostMapping("/rule_set")
     public void createRuleSet(@RequestBody @Valid RuleSet ruleSet) {
-        taskQueue.submitRuleSetCreation(ruleSet, ruleSetService);
+        taskQueue.submitRuleSetCreation(ruleSet);
     }
 
     @DeleteMapping("/rule_set")
     public void deleteRuleSet(@RequestBody @Valid RuleSet ruleSet) {
-        taskQueue.submitRuleSetDeletion(ruleSet, ruleSetService);
+        taskQueue.submitRuleSetDeletion(ruleSet);
     }
 }

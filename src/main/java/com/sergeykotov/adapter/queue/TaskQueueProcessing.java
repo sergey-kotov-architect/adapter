@@ -17,15 +17,13 @@ public class TaskQueueProcessing extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            Task task;
-            try {
-                task = queue.take();
-            } catch (InterruptedException e) {
-                log.error("execution of tasks from the queue has been interrupted");
-                return;
+        try {
+            while (true) {
+                Task task = queue.take();
+                task.execute();
             }
-            task.execute();
+        } catch (InterruptedException e) {
+            log.error("execution of tasks from the queue has been interrupted");
         }
     }
 }
