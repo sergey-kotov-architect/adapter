@@ -1,5 +1,7 @@
 package com.sergeykotov.adapter.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +46,7 @@ public class Rule {
         this.note = note;
     }
 
+    @JsonProperty("system_rule_map")
     public Map<String, String> getSystemRuleMap() {
         return systemRuleMap;
     }
