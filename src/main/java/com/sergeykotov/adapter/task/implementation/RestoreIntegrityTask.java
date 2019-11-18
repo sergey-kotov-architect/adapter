@@ -1,14 +1,14 @@
 package com.sergeykotov.adapter.task.implementation;
 
-import com.sergeykotov.adapter.service.RuleService;
+import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskType;
 
 public class RestoreIntegrityTask implements Task {
-    private final RuleService ruleService;
+    private final IntegrityService integrityService;
 
-    public RestoreIntegrityTask(RuleService ruleService) {
-        this.ruleService = ruleService;
+    public RestoreIntegrityTask(IntegrityService integrityService) {
+        this.integrityService = integrityService;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RestoreIntegrityTask implements Task {
 
     @Override
     public void execute() {
-        ruleService.restoreIntegrity();
+        integrityService.restore();
     }
 
     @Override

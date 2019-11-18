@@ -2,8 +2,10 @@ package com.sergeykotov.adapter.queue;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.TaskQueueException;
+import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.service.RuleService;
-import com.sergeykotov.adapter.task.*;
+import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskDto;
 import com.sergeykotov.adapter.task.implementation.CreateRuleTask;
 import com.sergeykotov.adapter.task.implementation.DeleteRuleTask;
 import com.sergeykotov.adapter.task.implementation.RestoreIntegrityTask;
@@ -56,8 +58,8 @@ public class TaskQueue {
         submitTask(task);
     }
 
-    public void submitRestoreIntegrityTask(RuleService ruleService) {
-        Task task = new RestoreIntegrityTask(ruleService);
+    public void submitRestoreIntegrityTask(IntegrityService integrityService) {
+        Task task = new RestoreIntegrityTask(integrityService);
         submitTask(task);
     }
 

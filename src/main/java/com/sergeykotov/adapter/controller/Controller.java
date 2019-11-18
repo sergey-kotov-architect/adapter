@@ -4,6 +4,7 @@ import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.queue.TaskQueueDto;
+import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.service.RuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,13 @@ import java.util.List;
 public class Controller {
     private final TaskQueue taskQueue;
     private final RuleService ruleService;
+    private final IntegrityService integrityService;
 
     @Autowired
-    public Controller(TaskQueue taskQueue, RuleService ruleService) {
+    public Controller(TaskQueue taskQueue, RuleService ruleService,IntegrityService integrityService) {
         this.taskQueue = taskQueue;
         this.ruleService = ruleService;
+        this.integrityService = integrityService;
     }
 
     @GetMapping("/rule")
@@ -50,12 +53,12 @@ public class Controller {
 
     @GetMapping("/integrity")
     public IntegrityDto verifyIntegrity() {
-        return ruleService.verifyIntegrity();
+        return integrityService.verify();
     }
 
     @PostMapping("/integrity")
     public void restoreIntegrity() {
-        taskQueue.submitRestoreIntegrityTask(ruleService);
+        taskQueue.submitRestoreIntegrityTask(integrityService);
     }
 
     @GetMapping("/queue")
