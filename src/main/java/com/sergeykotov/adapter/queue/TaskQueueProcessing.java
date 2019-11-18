@@ -34,6 +34,7 @@ public class TaskQueueProcessing extends Thread {
             }
             log.info("a new task " + task + " has been taken from the queue");
             task.execute();
+            task = null;
         }
         log.error("task queue processing has been interrupted");
     }
