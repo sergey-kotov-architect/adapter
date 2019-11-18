@@ -5,8 +5,10 @@ Web-service that provides REST API to manage business rules and its integrity on
 * create a rule on the systems (process in queue)
 * update a rule on the systems (process in queue)
 * delete a rule from the systems (process in queue)
+***
 * verify integrity
 * restore integrity (process in queue)
+***
 * extract task queue and currently executing task from the queue
 
 ### Technologies and tools
