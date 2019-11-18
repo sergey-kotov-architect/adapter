@@ -12,7 +12,9 @@
 	<artifactId>adapter</artifactId>
 	<version>1.0</version>
 	<name>adapter</name>
-	<description>Web-service that provides REST API to manage business rules on different systems</description>
+	<description>
+		Web-service that provides REST API to manage business rules and its integrity on different systems
+	</description>
 
 	<properties>
 		<java.version>1.8</java.version>
