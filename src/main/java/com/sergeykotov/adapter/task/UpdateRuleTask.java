@@ -14,7 +14,7 @@ public class UpdateRuleTask implements Task {
 
     @Override
     public TaskType getType() {
-        return TaskType.CREATE_RULE;
+        return TaskType.UPDATE_RULE;
     }
 
     @Override
