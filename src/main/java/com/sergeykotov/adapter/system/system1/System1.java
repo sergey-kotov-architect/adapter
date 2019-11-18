@@ -1,7 +1,8 @@
-package com.sergeykotov.adapter.system;
+package com.sergeykotov.adapter.system.system1;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.ExtractionException;
+import com.sergeykotov.adapter.system.System;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class System2 implements System {
-    private static final Logger log = Logger.getLogger(System2.class);
-    private static final String NAME = "System2";
+public class System1 implements System {
+    private static final Logger log = Logger.getLogger(System1.class);
+    private static final String NAME = "System1";
 
     private List<Rule> rules = new ArrayList<>();
 
@@ -22,7 +23,7 @@ public class System2 implements System {
 
     @Override
     public List<Rule> getRules() {
-        log.info("extracting rule...");
+        log.info("extracting Rule Sets...");
         try {
             Thread.sleep(2_000L); //latency simulation
         } catch (InterruptedException e) {
@@ -54,6 +55,8 @@ public class System2 implements System {
             log.error("failed to create rule " + rule);
             return false;
         }
+        String json = "{}";
+        rule.getSystemRuleMap().put(getName(), json);
         rules.add(rule);
         log.info("rule " + rule + " has been created");
         return true;

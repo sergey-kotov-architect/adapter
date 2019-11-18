@@ -2,7 +2,6 @@ package com.sergeykotov.adapter.controller;
 
 import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
-import com.sergeykotov.adapter.domain.RulesDto;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.queue.TaskQueueDto;
 import com.sergeykotov.adapter.service.RuleService;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -24,8 +24,8 @@ public class Controller {
     }
 
     @GetMapping("/rule")
-    public RulesDto getRuleSets() {
-        return ruleService.getRulesDto();
+    public List<Rule> getRules() {
+        return ruleService.getRules();
     }
 
     @GetMapping("/rule/{id}")

@@ -1,6 +1,8 @@
 package com.sergeykotov.adapter.domain;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Rule {
@@ -10,6 +12,10 @@ public class Rule {
     private String name;
 
     private String note;
+
+    //key - system name
+    //value - json about the rule on the system
+    private Map<String, String> systemRuleMap = new HashMap<>();
 
     public Rule() {
     }
@@ -36,6 +42,14 @@ public class Rule {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Map<String, String> getSystemRuleMap() {
+        return systemRuleMap;
+    }
+
+    public void setSystemRuleMap(Map<String, String> systemRuleMap) {
+        this.systemRuleMap = systemRuleMap;
     }
 
     @Override

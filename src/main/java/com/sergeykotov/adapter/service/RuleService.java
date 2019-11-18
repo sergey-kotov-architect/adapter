@@ -2,11 +2,10 @@ package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
-import com.sergeykotov.adapter.domain.RulesDto;
 import com.sergeykotov.adapter.exception.ExtractionException;
 import com.sergeykotov.adapter.system.System;
-import com.sergeykotov.adapter.system.System1;
-import com.sergeykotov.adapter.system.System2;
+import com.sergeykotov.adapter.system.system1.System1;
+import com.sergeykotov.adapter.system.system2.System2;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,35 +26,41 @@ public class RuleService {
         this.systems = Collections.unmodifiableList(systems);
     }
 
-    public RulesDto getRulesDto() {
+    public List<Rule> getRules() {
         log.info("extracting rules...");
-        Map<Rule, List<String>> ruleSetSystemsMap = new HashMap<>();
+        List<Rule> rules = new ArrayList<>();
         for (System system : systems) {
-            List<Rule> rules = system.getRules();
-            for (Rule rule : rules) {
-                ruleSetSystemsMap.putIfAbsent(rule, new ArrayList<>());
-                List<String> ruleSetSystems = ruleSetSystemsMap.get(rule);
-                ruleSetSystems.add(system.getName());
-                ruleSetSystemsMap.put(rule, ruleSetSystems);
+            List<Rule> systemRules = system.getRules();
+            if (rules.isEmpty()) {
+                rules = systemRules;
+            }
+            String systemName = system.getName();
+            for (Rule systemRule : systemRules) {
+                String json = systemRule.getSystemRuleMap().get(systemName);
+                rules.stream()
+                        .filter(r -> r.equals(systemRule))
+                        .map(Rule::getSystemRuleMap)
+                        .forEach(m -> m.put(systemName, json));
             }
         }
-        log.info(ruleSetSystemsMap.size() + " rules have been extracted");
-        RulesDto rulesDto = new RulesDto();
-        rulesDto.setRuleSetSystemsMap(ruleSetSystemsMap);
-        return rulesDto;
+        log.info(rules.size() + " rules have been extracted");
+        return rules;
     }
 
     public Rule getRule(long id) {
         log.info("extracting rule by ID " + id + "...");
-        //TODO: implement rule extraction by ID
-        try {
-            Thread.sleep(1_000L); //latency simulation
-        } catch (InterruptedException e) {
-            log.error("rule extraction by ID " + id + " has been interrupted");
-            throw new ExtractionException();
+        Rule rule = null;
+        for (System system : systems) {
+            Rule systemRule = system.getRule(id);
+            if (rule == null) {
+                rule = systemRule;
+            }
+            String systemName = system.getName();
+            String json = systemRule.getSystemRuleMap().get(systemName);
+            rule.getSystemRuleMap().put(system.getName(), json);
         }
         log.info("rule has been extracted by ID " + id);
-        return null;
+        return rule;
     }
 
     public void create(Rule rule) {
