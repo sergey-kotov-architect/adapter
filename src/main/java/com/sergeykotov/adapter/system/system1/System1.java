@@ -23,14 +23,14 @@ public class System1 implements System {
 
     @Override
     public List<Rule> getRules() {
-        log.info("extracting Rule Sets...");
+        log.info("extracting rules...");
         try {
             Thread.sleep(2_000L); //latency simulation
         } catch (InterruptedException e) {
-            log.error("rule extraction has been interrupted");
+            log.error("rules extraction has been interrupted");
             throw new ExtractionException();
         }
-        log.info(rules.size() + " rule have been extracted");
+        log.info(rules.size() + " rules have been extracted");
         return rules;
     }
 
