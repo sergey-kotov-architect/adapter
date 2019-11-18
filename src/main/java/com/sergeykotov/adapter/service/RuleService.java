@@ -23,6 +23,10 @@ public class RuleService {
         this.systems = Collections.unmodifiableList(systems);
     }
 
+    public List<System> getSystems() {
+        return systems;
+    }
+
     public List<Rule> getRules() {
         log.info("extracting rules...");
         List<Rule> rules = new ArrayList<>();

@@ -1,9 +1,11 @@
 package com.sergeykotov.adapter.domain;
 
+import java.util.List;
+
 public class IntegrityDto {
     private boolean consistent;
     private String time;
-    private String message;
+    private List<String> messages;
 
     public IntegrityDto() {
     }
@@ -24,11 +26,11 @@ public class IntegrityDto {
         this.time = time;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getMessages() {
+        return messages;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessages(List<String> messages) {
+        this.messages = messages;
     }
 }

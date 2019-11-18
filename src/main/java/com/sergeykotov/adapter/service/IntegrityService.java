@@ -2,11 +2,13 @@ package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.system.System;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,20 +22,18 @@ public class IntegrityService {
     }
 
     public IntegrityDto verify() {
-        log.info("verifying integrity...");
         String time = LocalDateTime.now().toString();
+
+        log.info("verifying integrity...");
+        List<System> systems = ruleService.getSystems();
         List<Rule> rules = ruleService.getRules();
-        boolean consistent = verify(rules);
+        List<String> messages = verify(systems, rules);
         log.info("integrity has been verified");
 
-        String success = "the business rules are consistent among the systems";
-        String fail = "integrity is violated";
-        String message = consistent ? success : fail;
-
         IntegrityDto integrityDto = new IntegrityDto();
-        integrityDto.setConsistent(consistent);
+        integrityDto.setConsistent(messages.isEmpty());
         integrityDto.setTime(time);
-        integrityDto.setMessage(message);
+        integrityDto.setMessages(messages);
         return integrityDto;
     }
 
@@ -49,7 +49,16 @@ public class IntegrityService {
         log.info("integrity has been restored");
     }
 
-    private boolean verify(List<Rule> rules) {
-        return true;
+    private List<String> verify(List<System> systems, List<Rule> rules) {
+        List<String> messages = new ArrayList<>(systems.size() * rules.size());
+        for (System system : systems) {
+            for (Rule rule : rules) {
+                if (!rule.getSystemRuleMap().containsKey(system.getName())) {
+                    String message = "system " + system + " does not contain rule " + rule;
+                    messages.add(message);
+                }
+            }
+        }
+        return messages;
     }
 }
