@@ -1,17 +1,18 @@
 Web-service that provides REST API to manage business rules and its integrity on different systems
 
-### Functions
+# Functions
+## Rule
 * extract rules from the systems
 * create a rule on the systems (process in queue)
 * update a rule on the systems (process in queue)
 * delete a rule from the systems (process in queue)
-***
+## Integrity
 * verify integrity
 * restore integrity (process in queue)
-***
+## Queue
 * extract task queue and currently executing task from the queue
 
-### Technologies and tools
+# Technologies and tools
 * Java 8
 * Spring framework (Boot, Web, Test, Actuator)
 * Concurrency
