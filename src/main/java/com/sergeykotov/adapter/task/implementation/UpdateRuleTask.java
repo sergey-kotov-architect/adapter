@@ -1,7 +1,9 @@
-package com.sergeykotov.adapter.task;
+package com.sergeykotov.adapter.task.implementation;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.service.RuleService;
+import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskType;
 
 public class UpdateRuleTask implements Task {
     private final RuleService ruleService;

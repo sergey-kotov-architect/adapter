@@ -1,20 +1,22 @@
-package com.sergeykotov.adapter.task;
+package com.sergeykotov.adapter.task.implementation;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.service.RuleService;
+import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskType;
 
-public class CreateRuleTask implements Task {
+public class DeleteRuleTask implements Task {
     private final RuleService ruleService;
     private final Rule rule;
 
-    public CreateRuleTask(RuleService ruleService, Rule rule) {
+    public DeleteRuleTask(RuleService ruleService, Rule rule) {
         this.ruleService = ruleService;
         this.rule = rule;
     }
 
     @Override
     public TaskType getType() {
-        return TaskType.CREATE_RULE;
+        return TaskType.DELETE_RULE;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class CreateRuleTask implements Task {
 
     @Override
     public void execute() {
-        ruleService.create(rule);
+        ruleService.delete(rule);
     }
 
     @Override

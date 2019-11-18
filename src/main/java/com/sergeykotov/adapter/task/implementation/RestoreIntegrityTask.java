@@ -1,6 +1,8 @@
-package com.sergeykotov.adapter.task;
+package com.sergeykotov.adapter.task.implementation;
 
 import com.sergeykotov.adapter.service.RuleService;
+import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskType;
 
 public class RestoreIntegrityTask implements Task {
     private final RuleService ruleService;

@@ -4,6 +4,10 @@ import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.TaskQueueException;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.*;
+import com.sergeykotov.adapter.task.implementation.CreateRuleTask;
+import com.sergeykotov.adapter.task.implementation.DeleteRuleTask;
+import com.sergeykotov.adapter.task.implementation.RestoreIntegrityTask;
+import com.sergeykotov.adapter.task.implementation.UpdateRuleTask;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
