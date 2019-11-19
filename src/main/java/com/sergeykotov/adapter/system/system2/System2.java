@@ -36,7 +36,7 @@ public class System2 implements System {
     }
 
     @Override
-    public Rule getRule(long id) {
+    public Rule getRule(long id) throws NotFoundException {
         log.info("extracting rule by ID " + id + "...");
         Rule rule = rules.stream().filter(r -> r.getId() == id).findAny().orElseThrow(NotFoundException::new);
         log.info("rule has been extracted by ID " + id);
@@ -72,7 +72,13 @@ public class System2 implements System {
             log.error("rule update has been interrupted");
             return false;
         }
-        Rule existingRule = getRule(rule.getId());
+        Rule existingRule;
+        try {
+            existingRule = getRule(rule.getId());
+        } catch (NotFoundException e) {
+            log.error("failed to update rule " + rule + ", not found by ID " + rule.getId());
+            return false;
+        }
         existingRule.setNote(rule.getNote());
         log.info("rule " + rule + " has been updated");
         return true;

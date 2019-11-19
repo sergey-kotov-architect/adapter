@@ -1,6 +1,7 @@
 package com.sergeykotov.adapter.controller;
 
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.service.RuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class RuleController {
     }
 
     @GetMapping("/{id}")
-    public Rule getRule(@PathVariable long id) {
+    public Rule getRule(@PathVariable long id) throws NotFoundException {
         return ruleService.getRule(id);
     }
 

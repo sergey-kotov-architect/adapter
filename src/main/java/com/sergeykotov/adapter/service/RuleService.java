@@ -1,6 +1,7 @@
 package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.system1.System1;
 import com.sergeykotov.adapter.system.system2.System2;
@@ -49,7 +50,7 @@ public class RuleService {
         return rules;
     }
 
-    public Rule getRule(long id) {
+    public Rule getRule(long id) throws NotFoundException {
         log.info("extracting rule by ID " + id + "...");
         Rule rule = null;
         for (System system : systems) {
@@ -98,10 +99,15 @@ public class RuleService {
         log.info("updating rule " + rule + "...");
         Map<System, Rule> affectedSystems = new HashMap<>(systems.size() * 2);
         for (System system : systems) {
+            Rule existingRule = null;
+            try {
+                existingRule = getRule(rule.getId());
+            } catch (NotFoundException e) {
+                log.error("failed to get previous state of rule " + rule + " on system " + system);
+            }
             boolean updated = system.updateRule(rule);
             if (updated) {
-                Rule previousRule = getRule(rule.getId());
-                affectedSystems.put(system, previousRule);
+                affectedSystems.put(system, existingRule);
                 continue;
             }
             String note = "failed to update rule " + rule + " on system " + system;
