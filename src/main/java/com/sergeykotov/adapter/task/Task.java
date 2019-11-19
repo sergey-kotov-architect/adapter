@@ -12,5 +12,5 @@ public interface Task {
         return taskDto;
     }
 
-    void execute();
+    TaskResult execute();
 }

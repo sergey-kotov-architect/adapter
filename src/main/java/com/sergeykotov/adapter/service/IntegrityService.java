@@ -3,6 +3,7 @@ package com.sergeykotov.adapter.service;
 import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.system.System;
+import com.sergeykotov.adapter.task.TaskResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,16 +38,21 @@ public class IntegrityService {
         return integrityDto;
     }
 
-    public void restore() {
+    public TaskResult restore() {
+        TaskResult taskResult = new TaskResult();
         log.info("restoring integrity...");
         //TODO: implement integrity restoration
         try {
             Thread.sleep(15_000L); //latency simulation
         } catch (InterruptedException e) {
             log.error("integrity restoration has been interrupted");
-            return;
+            taskResult.setExecuted(false);
+            return taskResult;
         }
         log.info("integrity has been restored");
+
+        taskResult.setExecuted(true);
+        return taskResult;
     }
 
     private List<String> verify(List<System> systems, List<Rule> rules) {

@@ -3,6 +3,7 @@ package com.sergeykotov.adapter.task.implementation;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskResult;
 import com.sergeykotov.adapter.task.TaskType;
 
 public class UpdateRuleTask implements Task {
@@ -25,8 +26,8 @@ public class UpdateRuleTask implements Task {
     }
 
     @Override
-    public void execute() {
-        ruleService.update(rule);
+    public TaskResult execute() {
+        return ruleService.update(rule);
     }
 
     @Override

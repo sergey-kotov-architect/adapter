@@ -2,6 +2,7 @@ package com.sergeykotov.adapter.task.implementation;
 
 import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskResult;
 import com.sergeykotov.adapter.task.TaskType;
 
 public class RestoreIntegrityTask implements Task {
@@ -22,8 +23,8 @@ public class RestoreIntegrityTask implements Task {
     }
 
     @Override
-    public void execute() {
-        integrityService.restore();
+    public TaskResult execute() {
+        return integrityService.restore();
     }
 
     @Override

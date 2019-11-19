@@ -4,6 +4,7 @@ import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.system1.System1;
 import com.sergeykotov.adapter.system.system2.System2;
+import com.sergeykotov.adapter.task.TaskResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,8 @@ public class RuleService {
         return rule;
     }
 
-    public void create(Rule rule) {
+    public TaskResult create(Rule rule) {
+        TaskResult taskResult = new TaskResult();
         log.info("creating rule " + rule + "...");
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
@@ -73,7 +75,8 @@ public class RuleService {
                 affectedSystems.add(system);
                 continue;
             }
-            log.error("failed to create rule " + rule + " on system " + system);
+            String note = "failed to create rule " + rule + " on system " + system;
+            log.error(note);
             for (System affectedSystem : affectedSystems) {
                 boolean deleted = affectedSystem.deleteRule(rule);
                 if (!deleted) {
@@ -81,12 +84,17 @@ public class RuleService {
                     log.error(String.format(message, affectedSystem, rule));
                 }
             }
-            return;
+            taskResult.setExecuted(false);
+            taskResult.setNote(note);
+            return taskResult;
         }
         log.info("rule " + rule + " has been created");
+        taskResult.setExecuted(true);
+        return taskResult;
     }
 
-    public void update(Rule rule) {
+    public TaskResult update(Rule rule) {
+        TaskResult taskResult = new TaskResult();
         log.info("updating rule " + rule + "...");
         Map<System, Rule> affectedSystems = new HashMap<>(systems.size() * 2);
         for (System system : systems) {
@@ -96,7 +104,8 @@ public class RuleService {
                 affectedSystems.put(system, previousRule);
                 continue;
             }
-            log.error("failed to update rule " + rule + " on system " + system);
+            String note = "failed to update rule " + rule + " on system " + system;
+            log.error(note);
             for (Map.Entry<System, Rule> entry : affectedSystems.entrySet()) {
                 System affectedSystem = entry.getKey();
                 Rule previousRule = entry.getValue();
@@ -106,12 +115,17 @@ public class RuleService {
                     log.error(String.format(message, affectedSystem, rule));
                 }
             }
-            return;
+            taskResult.setExecuted(false);
+            taskResult.setNote(note);
+            return taskResult;
         }
         log.info("rule " + rule + " has been updated");
+        taskResult.setExecuted(true);
+        return taskResult;
     }
 
-    public void delete(Rule rule) {
+    public TaskResult delete(Rule rule) {
+        TaskResult taskResult = new TaskResult();
         log.info("deleting rule " + rule + "...");
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
@@ -120,7 +134,8 @@ public class RuleService {
                 affectedSystems.add(system);
                 continue;
             }
-            log.error("failed to delete rule " + rule + " on system " + system);
+            String note = "failed to delete rule " + rule + " on system " + system;
+            log.error(note);
             for (System affectedSystem : affectedSystems) {
                 boolean created = affectedSystem.createRule(rule);
                 if (!created) {
@@ -128,8 +143,12 @@ public class RuleService {
                     log.error(String.format(message, affectedSystem, rule));
                 }
             }
-            return;
+            taskResult.setExecuted(false);
+            taskResult.setNote(note);
+            return taskResult;
         }
         log.info("rule " + rule + " has been deleted");
+        taskResult.setExecuted(true);
+        return taskResult;
     }
 }

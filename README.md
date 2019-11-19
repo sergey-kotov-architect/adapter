@@ -12,6 +12,7 @@ Web-service that provides REST API to manage business rules and its integrity on
 * restore integrity (process in queue)
 ## Task Queue
 * extract task queue and currently executing task from the queue
+* extract task results
 
 # Technologies and tools
 * Java 8

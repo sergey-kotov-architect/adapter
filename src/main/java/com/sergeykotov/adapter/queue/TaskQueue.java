@@ -6,6 +6,7 @@ import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskDto;
+import com.sergeykotov.adapter.task.TaskResult;
 import com.sergeykotov.adapter.task.implementation.CreateRuleTask;
 import com.sergeykotov.adapter.task.implementation.DeleteRuleTask;
 import com.sergeykotov.adapter.task.implementation.RestoreIntegrityTask;
@@ -13,6 +14,7 @@ import com.sergeykotov.adapter.task.implementation.UpdateRuleTask;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,7 +26,8 @@ public class TaskQueue {
     private static final int CAPACITY = 10;
 
     private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
-    private final TaskQueueProcessing taskQueueProcessing = new TaskQueueProcessing(queue);
+    private final List<TaskResult> taskResults = new ArrayList<>();
+    private final TaskQueueProcessing taskQueueProcessing = new TaskQueueProcessing(queue, taskResults);
 
     public TaskQueue() {
         taskQueueProcessing.start();
@@ -41,6 +44,10 @@ public class TaskQueue {
         taskQueueDto.setTask(taskDto);
         taskQueueDto.setTasks(tasks);
         return taskQueueDto;
+    }
+
+    public List<TaskResult> getTaskResults() {
+        return taskResults;
     }
 
     public void submitCreateRuleTask(RuleService ruleService, Rule rule) {

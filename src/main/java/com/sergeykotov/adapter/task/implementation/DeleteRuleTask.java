@@ -3,6 +3,7 @@ package com.sergeykotov.adapter.task.implementation;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskResult;
 import com.sergeykotov.adapter.task.TaskType;
 
 public class DeleteRuleTask implements Task {
@@ -25,8 +26,8 @@ public class DeleteRuleTask implements Task {
     }
 
     @Override
-    public void execute() {
-        ruleService.delete(rule);
+    public TaskResult execute() {
+        return ruleService.delete(rule);
     }
 
     @Override
