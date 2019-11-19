@@ -59,8 +59,8 @@ public class TaskQueue {
         submitTask(task);
     }
 
-    public void submitDeleteRuleTask(RuleService ruleService, Rule rule) {
-        Task task = new DeleteRuleTask(ruleService, rule);
+    public void submitDeleteRuleTask(RuleService ruleService, long id) {
+        Task task = new DeleteRuleTask(ruleService, id);
         submitTask(task);
     }
 

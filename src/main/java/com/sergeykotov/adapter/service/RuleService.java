@@ -138,9 +138,19 @@ public class RuleService {
         return taskResult;
     }
 
-    public TaskResult delete(Rule rule) {
+    public TaskResult delete(long id) {
         TaskResult taskResult = new TaskResult();
-        log.info("deleting rule " + rule + "...");
+        log.info("deleting rule by ID " + id + "...");
+        Rule rule;
+        try {
+            rule = getRule(id);
+        } catch (NotFoundException e) {
+            String note = "failed to delete rule by ID " + id + ": rule not found";
+            log.error(note);
+            taskResult.setExecuted(false);
+            taskResult.setNote(note);
+            return taskResult;
+        }
         List<System> affectedSystems = new ArrayList<>(systems.size());
         for (System system : systems) {
             boolean deleted = system.deleteRule(rule);
@@ -165,7 +175,7 @@ public class RuleService {
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
         }
-        log.info("rule " + rule + " has been deleted");
+        log.info("rule has been deleted by ID " + id);
         taskResult.setExecuted(true);
         return taskResult;
     }

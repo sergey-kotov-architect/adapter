@@ -42,8 +42,8 @@ public class RuleController {
         taskQueue.submitUpdateRuleTask(ruleService, rule);
     }
 
-    @DeleteMapping
-    public void deleteRule(@RequestBody @Valid Rule rule) {
-        taskQueue.submitDeleteRuleTask(ruleService, rule);
+    @DeleteMapping("/{id}")
+    public void deleteRule(@PathVariable long id) {
+        taskQueue.submitDeleteRuleTask(ruleService, id);
     }
 }
