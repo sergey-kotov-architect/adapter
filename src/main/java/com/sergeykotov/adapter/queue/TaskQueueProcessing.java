@@ -11,6 +11,7 @@ import java.util.concurrent.BlockingQueue;
 public class TaskQueueProcessing extends Thread {
     private static final Logger log = Logger.getLogger(TaskQueueProcessing.class);
     private static final String NAME = "task-queue-processing";
+    private static final int TASK_RESULTS_CAPACITY = Integer.MAX_VALUE;
 
     private final BlockingQueue<Task> queue;
     private final List<TaskResult> taskResults;
@@ -47,6 +48,9 @@ public class TaskQueueProcessing extends Thread {
             taskResult.setStartTime(start.toString());
             taskResult.setEndTime(end.toString());
             taskResult.setTask(task.getTaskDto());
+            if (taskResults.size() == TASK_RESULTS_CAPACITY) {
+                taskResults.remove(0);
+            }
             taskResults.add(taskResult);
             task = null;
         }
