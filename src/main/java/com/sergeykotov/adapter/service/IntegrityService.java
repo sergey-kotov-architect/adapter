@@ -23,18 +23,23 @@ public class IntegrityService {
     }
 
     public IntegrityDto verify() {
-        String time = LocalDateTime.now().toString();
+        String startTime = LocalDateTime.now().toString();
 
         log.info("verifying integrity...");
         List<System> systems = ruleService.getSystems();
         List<Rule> rules = ruleService.getRules();
-        List<String> messages = verify(systems, rules);
-        log.info("integrity has been verified");
+        List<String> notes = verify(systems, rules);
+        boolean verified = notes.isEmpty();
+        if (verified) {
+            log.info("integrity has been verified");
+        } else {
+            log.error("integrity has been violated: " + notes);
+        }
 
         IntegrityDto integrityDto = new IntegrityDto();
-        integrityDto.setConsistent(messages.isEmpty());
-        integrityDto.setTime(time);
-        integrityDto.setMessages(messages);
+        integrityDto.setVerified(verified);
+        integrityDto.setVerificationStartTime(startTime);
+        integrityDto.setNotes(notes);
         return integrityDto;
     }
 
@@ -56,15 +61,15 @@ public class IntegrityService {
     }
 
     private List<String> verify(List<System> systems, List<Rule> rules) {
-        List<String> messages = new ArrayList<>(systems.size() * rules.size());
+        List<String> notes = new ArrayList<>(systems.size() * rules.size());
         for (System system : systems) {
             for (Rule rule : rules) {
                 if (!rule.getSystemRuleMap().containsKey(system.getName())) {
-                    String message = "system " + system + " does not contain rule " + rule;
-                    messages.add(message);
+                    String note = "system " + system + " does not contain rule " + rule;
+                    notes.add(note);
                 }
             }
         }
-        return messages;
+        return notes;
     }
 }

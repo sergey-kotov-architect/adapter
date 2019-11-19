@@ -1,36 +1,39 @@
 package com.sergeykotov.adapter.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class IntegrityDto {
-    private boolean consistent;
-    private String time;
-    private List<String> messages;
+    private boolean verified;
+    private String verificationStartTime;
+    private List<String> notes;
 
     public IntegrityDto() {
     }
 
-    public boolean isConsistent() {
-        return consistent;
+    public boolean isVerified() {
+        return verified;
     }
 
-    public void setConsistent(boolean consistent) {
-        this.consistent = consistent;
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
-    public String getTime() {
-        return time;
+    @JsonProperty("verification_start_time")
+    public String getVerificationStartTime() {
+        return verificationStartTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setVerificationStartTime(String verificationStartTime) {
+        this.verificationStartTime = verificationStartTime;
     }
 
-    public List<String> getMessages() {
-        return messages;
+    public List<String> getNotes() {
+        return notes;
     }
 
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
     }
 }
