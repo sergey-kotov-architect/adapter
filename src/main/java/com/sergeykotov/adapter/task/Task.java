@@ -12,7 +12,7 @@ public interface Task {
     default TaskDto getTaskDto() {
         TaskDto taskDto = new TaskDto();
         taskDto.setSubmissionTime(getSubmissionTime().toString());
-        taskDto.setName(getName());
+        taskDto.setName(getName().toString());
         taskDto.setNote(getNote());
         return taskDto;
     }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TaskDto {
     private String submissionTime;
-    private TaskType name;
+    private String name;
     private String note;
 
     public TaskDto() {
@@ -19,11 +19,11 @@ public class TaskDto {
         this.submissionTime = submissionTime;
     }
 
-    public TaskType getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(TaskType name) {
+    public void setName(String name) {
         this.name = name;
     }
 
