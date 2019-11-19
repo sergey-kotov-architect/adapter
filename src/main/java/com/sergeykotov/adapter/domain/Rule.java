@@ -2,12 +2,14 @@ package com.sergeykotov.adapter.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Rule {
+    @Min(1)
     private long id;
 
     @NotEmpty
