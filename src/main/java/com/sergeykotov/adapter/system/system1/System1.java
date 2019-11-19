@@ -2,6 +2,7 @@ package com.sergeykotov.adapter.system.system1;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.ExtractionException;
+import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.system.System;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class System1 implements System {
     @Override
     public Rule getRule(long id) {
         log.info("extracting rule by ID " + id + "...");
-        Rule rule = rules.stream().filter(r -> r.getId() == id).findAny().orElseThrow(ExtractionException::new);
+        Rule rule = rules.stream().filter(r -> r.getId() == id).findAny().orElseThrow(NotFoundException::new);
         log.info("rule has been extracted by ID " + id);
         return rule;
     }
