@@ -1,5 +1,6 @@
 package com.sergeykotov.adapter.queue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sergeykotov.adapter.task.TaskDto;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public class TaskQueueDto {
     private int capacity;
     private int size;
-    private TaskDto task;
+    private TaskDto executingTask;
     private List<TaskDto> tasks;
 
     public TaskQueueDto() {
@@ -29,12 +30,13 @@ public class TaskQueueDto {
         this.size = size;
     }
 
-    public TaskDto getTask() {
-        return task;
+    @JsonProperty("executing_task")
+    public TaskDto getExecutingTask() {
+        return executingTask;
     }
 
-    public void setTask(TaskDto task) {
-        this.task = task;
+    public void setExecutingTask(TaskDto executingTask) {
+        this.executingTask = executingTask;
     }
 
     public List<TaskDto> getTasks() {

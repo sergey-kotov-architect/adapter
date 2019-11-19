@@ -1,6 +1,7 @@
 package com.sergeykotov.adapter.queue;
 
 import com.sergeykotov.adapter.task.Task;
+import com.sergeykotov.adapter.task.TaskDto;
 import com.sergeykotov.adapter.task.TaskResult;
 import org.apache.log4j.Logger;
 
@@ -24,8 +25,8 @@ public class TaskQueueProcessing extends Thread {
         setDaemon(true);
     }
 
-    public Task getTask() {
-        return task;
+    public TaskDto getExecutingTaskDto() {
+        return task == null ? null : task.getTaskDto();
     }
 
     @Override

@@ -35,13 +35,12 @@ public class TaskQueue {
 
     public TaskQueueDto getTaskQueueDto() {
         List<TaskDto> tasks = queue.stream().map(Task::getTaskDto).collect(Collectors.toList());
-        Task task = taskQueueProcessing.getTask();
-        TaskDto taskDto = (task != null) ? task.getTaskDto() : null;
+        TaskDto executingTaskDto = taskQueueProcessing.getExecutingTaskDto();
 
         TaskQueueDto taskQueueDto = new TaskQueueDto();
         taskQueueDto.setCapacity(CAPACITY);
         taskQueueDto.setSize(tasks.size());
-        taskQueueDto.setTask(taskDto);
+        taskQueueDto.setExecutingTask(executingTaskDto);
         taskQueueDto.setTasks(tasks);
         return taskQueueDto;
     }
