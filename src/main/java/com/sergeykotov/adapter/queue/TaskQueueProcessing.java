@@ -44,9 +44,9 @@ public class TaskQueueProcessing extends Thread {
 
             LocalDateTime end = LocalDateTime.now();
             log.info("task " + task + " has been executed, queue size " + queue.size());
-            taskResult.setTask(task.getTaskDto());
             taskResult.setStartTime(start.toString());
             taskResult.setEndTime(end.toString());
+            taskResult.setTask(task.getTaskDto());
             taskResults.add(taskResult);
             task = null;
         }

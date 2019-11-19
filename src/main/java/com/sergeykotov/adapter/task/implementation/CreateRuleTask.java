@@ -6,9 +6,12 @@ import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskResult;
 import com.sergeykotov.adapter.task.TaskType;
 
+import java.time.LocalDateTime;
+
 public class CreateRuleTask implements Task {
     private final RuleService ruleService;
     private final Rule rule;
+    private final LocalDateTime submissionTime = LocalDateTime.now();
 
     public CreateRuleTask(RuleService ruleService, Rule rule) {
         this.ruleService = ruleService;
@@ -16,12 +19,17 @@ public class CreateRuleTask implements Task {
     }
 
     @Override
-    public TaskType getType() {
+    public LocalDateTime getSubmissionTime() {
+        return submissionTime;
+    }
+
+    @Override
+    public TaskType getName() {
         return TaskType.CREATE_RULE;
     }
 
     @Override
-    public String getName() {
+    public String getNote() {
         return rule.getName();
     }
 
@@ -32,6 +40,6 @@ public class CreateRuleTask implements Task {
 
     @Override
     public String toString() {
-        return getType() + " " + getName();
+        return getName() + " " + getNote();
     }
 }

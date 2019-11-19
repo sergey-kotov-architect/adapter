@@ -1,14 +1,19 @@
 package com.sergeykotov.adapter.task;
 
-public interface Task {
-    TaskType getType();
+import java.time.LocalDateTime;
 
-    String getName();
+public interface Task {
+    LocalDateTime getSubmissionTime();
+
+    TaskType getName();
+
+    String getNote();
 
     default TaskDto getTaskDto() {
         TaskDto taskDto = new TaskDto();
-        taskDto.setType(getType());
+        taskDto.setSubmissionTime(getSubmissionTime().toString());
         taskDto.setName(getName());
+        taskDto.setNote(getNote());
         return taskDto;
     }
 

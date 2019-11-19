@@ -5,20 +5,28 @@ import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskResult;
 import com.sergeykotov.adapter.task.TaskType;
 
+import java.time.LocalDateTime;
+
 public class RestoreIntegrityTask implements Task {
     private final IntegrityService integrityService;
+    private final LocalDateTime submissionTime = LocalDateTime.now();
 
     public RestoreIntegrityTask(IntegrityService integrityService) {
         this.integrityService = integrityService;
     }
 
     @Override
-    public TaskType getType() {
+    public LocalDateTime getSubmissionTime() {
+        return submissionTime;
+    }
+
+    @Override
+    public TaskType getName() {
         return TaskType.RESTORE_INTEGRITY;
     }
 
     @Override
-    public String getName() {
+    public String getNote() {
         return "";
     }
 
@@ -29,6 +37,6 @@ public class RestoreIntegrityTask implements Task {
 
     @Override
     public String toString() {
-        return getType().toString();
+        return getName().toString();
     }
 }
