@@ -25,3 +25,12 @@ Web-service that provides REST API to manage business rules and its integrity on
 * IntelliJ IDEA
 * Insomnia REST Client
 * Visual VM (Java profiler)
+
+# TODO
+* implement integrity restoration
+* verify rule state while integrity verification
+* make task queue capacity configurable
+* add unit tests
+* save task result to database (SQLite, JDBC, DBCP)
+* manage rule asynchronically (one thread per system) using thread pool
+* take tasks from external message queue (ActiveMQ)
