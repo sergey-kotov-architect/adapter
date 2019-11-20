@@ -67,7 +67,7 @@ public class TaskQueue {
         return taskResults;
     }
 
-    public void deleteTaskResults(String dateTime) {
+    public int deleteTaskResults(String dateTime) {
         log.info("deleting task results earlier than " + dateTime + "...");
         try {
             dateTime = LocalDateTime.parse(dateTime).toString();
@@ -83,6 +83,7 @@ public class TaskQueue {
             throw new DatabaseException();
         }
         log.info(count + " task results have been deleted");
+        return count;
     }
 
     public void submitCreateRuleTask(RuleService ruleService, Rule rule) {
