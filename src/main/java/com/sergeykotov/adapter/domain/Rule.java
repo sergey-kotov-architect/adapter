@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class Rule {
 
     //key - system name
     //value - json about the rule on the system
+    @NotNull
     private Map<String, String> systemRuleMap = new HashMap<>();
 
     public Rule() {
