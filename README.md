@@ -14,9 +14,16 @@ Web-service that provides REST API to manage business rules and its integrity on
 * extract task queue and currently executing task from the queue
 * extract task results
 
+# Database
+![database diagram](src/main/resources/adapter_db_diagram.png)  
+[SQLite database schema](src/main/resources/adapter_sqlite_schema.sql)  
+
 # Technologies and tools
 * Java 8
 * Spring framework (Boot, Web, Test, Actuator)
+* SQLite
+* JDBC
+* Apache DBCP (connection pooling framework)
 * Concurrency
 * Message Queue
 * Log4j
@@ -25,12 +32,12 @@ Web-service that provides REST API to manage business rules and its integrity on
 * IntelliJ IDEA
 * Insomnia REST Client
 * Visual VM (Java profiler)
+* SQLite Studio
 
 # TODO
 * implement integrity restoration
 * verify rule state while integrity verification
 * make task queue capacity, task results capacity, api key configurable
 * add unit tests
-* save task result to database (SQLite, JDBC, DBCP)
 * manage rule asynchronically (one thread per system) using thread pool
 * take tasks from external message queue (ActiveMQ)

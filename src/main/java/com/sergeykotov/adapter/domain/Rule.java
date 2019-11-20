@@ -25,7 +25,7 @@ public class Rule {
     //value - json about the rule on the system
     @NotNull
     @Size(max = 0)
-    private Map<String, String> systemRuleMap = new HashMap<>();
+    private transient Map<String, String> systemRuleMap = new HashMap<>();
 
     public Rule() {
     }

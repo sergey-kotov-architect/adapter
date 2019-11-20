@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -48,8 +47,8 @@ public class IntegrityService {
         TaskResult taskResult = new TaskResult();
         log.info("restoring integrity...");
         List<System> systems = ruleService.getSystems();
-        List<Rule> systemsRules = ruleService.getRules();
-        List<String> notes = restore(systems, rules, systemsRules);
+        List<Rule> systemRules = ruleService.getRules();
+        List<String> notes = restore(systems, rules, systemRules);
         boolean succeeded = notes.isEmpty();
         if (succeeded) {
             log.info("integrity has been restored");
@@ -74,7 +73,16 @@ public class IntegrityService {
         return notes;
     }
 
-    private List<String> restore(List<System> systems, List<Rule> rules, List<Rule> systemsRules) {
-        return Collections.emptyList();
+    private List<String> restore(List<System> systems, List<Rule> rules, List<Rule> systemRules) {
+        List<String> notes = new ArrayList<>(systems.size() * rules.size());
+        for (System system : systems) {
+            for (Rule rule : rules) {
+                if (!rule.getSystemRuleMap().containsKey(system.getName())) {
+                    String note = "system " + system + " does not contain rule " + rule;
+                    notes.add(note);
+                }
+            }
+        }
+        return notes;
     }
 }
