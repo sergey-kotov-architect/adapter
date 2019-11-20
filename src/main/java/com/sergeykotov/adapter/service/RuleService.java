@@ -2,7 +2,7 @@ package com.sergeykotov.adapter.service;
 
 import com.sergeykotov.adapter.dao.RuleDao;
 import com.sergeykotov.adapter.domain.Rule;
-import com.sergeykotov.adapter.exception.ExtractionException;
+import com.sergeykotov.adapter.exception.DatabaseException;
 import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.system1.System1;
@@ -44,7 +44,7 @@ public class RuleService {
             rules = ruleDao.extract();
         } catch (SQLException e) {
             log.error("failed to extract rules from the database", e);
-            throw new ExtractionException(e);
+            throw new DatabaseException();
         }
         log.info(rules.size() + " rules have been extracted from the database");
         for (System system : systems) {
@@ -58,7 +58,7 @@ public class RuleService {
                         .forEach(m -> m.put(systemName, json));
             }
         }
-        log.info(rules.size() + " rules have been extracted");
+        log.info("rules details have been extracted from the systems");
         return rules;
     }
 
@@ -69,7 +69,7 @@ public class RuleService {
             rule = ruleDao.extractById(id);
         } catch (SQLException e) {
             log.error("failed to extract rule from the database by ID " + id, e);
-            throw new ExtractionException(e);
+            throw new DatabaseException();
         }
         log.info("rule has been extracted from the database by ID " + id);
         for (System system : systems) {
@@ -78,7 +78,7 @@ public class RuleService {
             String json = systemRule.getSystemRuleMap().get(systemName);
             rule.getSystemRuleMap().put(system.getName(), json);
         }
-        log.info("rule has been extracted by ID " + id);
+        log.info("details have been extracted from the systems for the rule ID " + id);
         return rule;
     }
 
@@ -139,8 +139,8 @@ public class RuleService {
         Rule existingRule = null;
         try {
             existingRule = getRule(id);
-        } catch (NotFoundException e) {
-            log.error("failed to extract from the database previous state of rule ID " + id);
+        } catch (Exception e) {
+            log.error("failed to extract from the database and the systems previous state of rule ID " + id);
         }
         for (System system : systems) {
             boolean updated = system.updateRule(rule);
@@ -153,7 +153,7 @@ public class RuleService {
             log.error(note);
             notes.add(note);
             for (System affectedSystem : affectedSystems) {
-                boolean restored = affectedSystem.updateRule(existingRule);
+                boolean restored = existingRule != null && affectedSystem.updateRule(existingRule);
                 if (!restored) {
                     String format = "integrity has been violated: system %s has rule ID %d in invalid state";
                     String message = String.format(format, affectedSystem, id);
@@ -189,12 +189,12 @@ public class RuleService {
 
     public TaskResult delete(long id) {
         TaskResult taskResult = new TaskResult();
-        log.info("deleting rule by ID " + id + "...");
+        log.info("deleting rule ID " + id + "...");
         Rule rule;
         try {
             rule = getRule(id);
-        } catch (NotFoundException e) {
-            String note = "failed to delete rule by ID " + id + ": rule not found";
+        } catch (Exception e) {
+            String note = "failed to extract rule ID " + id + " from the database and systems";
             log.error(note);
             taskResult.setSucceeded(false);
             taskResult.setNote(note);

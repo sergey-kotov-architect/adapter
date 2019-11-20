@@ -29,8 +29,7 @@ public class Rule {
     //key - system name
     //value - json about the rule on the system
     @NotNull
-    @Size(max = 0)
-    private transient Map<String, String> systemRuleMap = new HashMap<>();
+    private Map<String, String> systemRuleMap = new HashMap<>();
 
     public Rule() {
     }
