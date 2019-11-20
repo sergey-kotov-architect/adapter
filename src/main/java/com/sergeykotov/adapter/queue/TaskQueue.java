@@ -3,7 +3,6 @@ package com.sergeykotov.adapter.queue;
 import com.sergeykotov.adapter.dao.TaskResultDao;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.DatabaseException;
-import com.sergeykotov.adapter.exception.ExtractionException;
 import com.sergeykotov.adapter.exception.InvalidInputException;
 import com.sergeykotov.adapter.exception.TaskQueueException;
 import com.sergeykotov.adapter.service.IntegrityService;
@@ -61,7 +60,7 @@ public class TaskQueue {
             taskResults = taskResultDao.extract();
         } catch (SQLException e) {
             log.error("failed to extract task results", e);
-            throw new ExtractionException(e);
+            throw new DatabaseException();
         }
         log.info(taskResults.size() + " task results have been extracted");
         return taskResults;
