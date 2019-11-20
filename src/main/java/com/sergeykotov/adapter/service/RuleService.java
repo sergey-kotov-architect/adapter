@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class RuleService {
@@ -133,27 +135,25 @@ public class RuleService {
     public TaskResult update(long id, Rule rule) {
         TaskResult taskResult = new TaskResult();
         log.info("updating rule by ID " + id + "...");
-        Map<System, Rule> affectedSystems = new HashMap<>(systems.size() * 2);
+        List<System> affectedSystems = new ArrayList<>(systems.size());
+        Rule existingRule = null;
+        try {
+            existingRule = getRule(id);
+        } catch (NotFoundException e) {
+            log.error("failed to extract from the database previous state of rule ID " + id);
+        }
         for (System system : systems) {
-            Rule existingRule = null;
-            try {
-                existingRule = getRule(id);
-            } catch (NotFoundException e) {
-                log.error("failed to get previous state of rule ID " + id + " on system " + system);
-            }
             boolean updated = system.updateRule(rule);
             if (updated) {
-                affectedSystems.put(system, existingRule);
+                affectedSystems.add(system);
                 continue;
             }
             List<String> notes = new ArrayList<>();
             String note = "failed to update rule ID " + id + " on system " + system;
             log.error(note);
             notes.add(note);
-            for (Map.Entry<System, Rule> entry : affectedSystems.entrySet()) {
-                System affectedSystem = entry.getKey();
-                Rule previousRule = entry.getValue();
-                boolean restored = affectedSystem.updateRule(previousRule);
+            for (System affectedSystem : affectedSystems) {
+                boolean restored = affectedSystem.updateRule(existingRule);
                 if (!restored) {
                     String format = "integrity has been violated: system %s has rule ID %d in invalid state";
                     String message = String.format(format, affectedSystem, id);
