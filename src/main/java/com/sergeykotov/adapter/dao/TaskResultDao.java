@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -52,7 +53,7 @@ public class TaskResultDao {
                 taskResult.setNote(resultSet.getString("note"));
                 taskResults.add(taskResult);
             }
-            return taskResults;
+            return Collections.unmodifiableList(taskResults);
         }
     }
 }

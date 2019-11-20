@@ -6,6 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,6 +21,10 @@ public class Rule {
 
     @Size(max = 4000)
     private String note;
+
+    private LocalDateTime creationTime;
+
+    private LocalDateTime lastUpdateTime;
 
     //key - system name
     //value - json about the rule on the system
@@ -52,6 +57,22 @@ public class Rule {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public LocalDateTime getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(LocalDateTime lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 
     @JsonProperty("system_rule_map")
