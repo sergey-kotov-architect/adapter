@@ -19,6 +19,7 @@ public class TaskResultDao {
             "(?, ?, ?, ?, ?, ?, ?);";
     private static final String EXTRACT_CMD = "select t.start_time, t.end_time, t.submission_time, t.task_name, " +
             "t.task_note, t.succeeded, t.note from task_result t;";
+    private static final String DELETE_CMD = "delete from task_result where end_time < ?;";
 
     public boolean save(TaskResult taskResult) throws SQLException {
         try (Connection connection = ConnectionPool.getConnection();
@@ -54,6 +55,14 @@ public class TaskResultDao {
                 taskResults.add(taskResult);
             }
             return Collections.unmodifiableList(taskResults);
+        }
+    }
+
+    public int delete(String dateTime) throws SQLException {
+        try (Connection connection = ConnectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CMD)) {
+            preparedStatement.setString(1, dateTime);
+            return preparedStatement.executeUpdate();
         }
     }
 }

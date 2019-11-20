@@ -2,7 +2,9 @@ package com.sergeykotov.adapter.queue;
 
 import com.sergeykotov.adapter.dao.TaskResultDao;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.exception.DatabaseException;
 import com.sergeykotov.adapter.exception.ExtractionException;
+import com.sergeykotov.adapter.exception.InvalidInputException;
 import com.sergeykotov.adapter.exception.TaskQueueException;
 import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.service.RuleService;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -62,6 +65,24 @@ public class TaskQueue {
         }
         log.info(taskResults.size() + " task results have been extracted");
         return taskResults;
+    }
+
+    public void deleteTaskResults(String dateTime) {
+        log.info("deleting task results earlier than " + dateTime + "...");
+        try {
+            dateTime = LocalDateTime.parse(dateTime).toString();
+        } catch (Exception e) {
+            log.error("failed to parse input datetime " + dateTime, e);
+            throw new InvalidInputException();
+        }
+        int count;
+        try {
+            count = taskResultDao.delete(dateTime);
+        } catch (SQLException e) {
+            log.error("failed to delete task results", e);
+            throw new DatabaseException();
+        }
+        log.info(count + " task results have been deleted");
     }
 
     public void submitCreateRuleTask(RuleService ruleService, Rule rule) {

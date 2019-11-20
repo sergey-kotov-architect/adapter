@@ -32,4 +32,10 @@ public class QueueController {
         authorizationService.authorize(authorization);
         return taskQueue.getTaskResults();
     }
+
+    @DeleteMapping("/task")
+    public void deleteTaskResults(@RequestHeader String authorization, @RequestHeader("date_time") String dateTime) {
+        authorizationService.authorize(authorization);
+        taskQueue.deleteTaskResults(dateTime);
+    }
 }

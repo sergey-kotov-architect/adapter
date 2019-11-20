@@ -13,6 +13,7 @@ Web-service that provides REST API to manage business rules and its integrity on
 ## Task Queue
 * extract task queue and currently executing task from the queue
 * extract task results
+* delete task results by time
 
 # Database
 ![database diagram](src/main/resources/adapter_db_diagram.png)  
