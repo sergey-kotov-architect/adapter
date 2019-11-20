@@ -52,12 +52,16 @@ public class TaskQueue {
     }
 
     public List<TaskResult> getTaskResults() {
+        log.info("extracting task results...");
+        List<TaskResult> taskResults;
         try {
-            return taskResultDao.extract();
+            taskResults = taskResultDao.extract();
         } catch (SQLException e) {
             log.error("failed to extract task results", e);
             throw new ExtractionException();
         }
+        log.info(taskResults.size() + " task results have been extracted");
+        return taskResults;
     }
 
     public void submitCreateRuleTask(RuleService ruleService, Rule rule) {
