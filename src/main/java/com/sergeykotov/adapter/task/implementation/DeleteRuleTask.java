@@ -29,7 +29,7 @@ public class DeleteRuleTask implements Task {
 
     @Override
     public String getNote() {
-        return "rule ID " + id;
+        return "ID " + id;
     }
 
     @Override
