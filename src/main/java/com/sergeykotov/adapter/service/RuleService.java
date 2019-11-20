@@ -165,6 +165,23 @@ public class RuleService {
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
         }
+        rule.setLastUpdateTime(LocalDateTime.now());
+        boolean updated;
+        try {
+            updated = ruleDao.update(rule);
+        } catch (SQLException e) {
+            String note = "failed to update rule in the database by ID " + id;
+            log.error(note, e);
+            taskResult.setSucceeded(false);
+            taskResult.setNote(note + ": " + e.getMessage());
+            return taskResult;
+        }
+        if (!updated) {
+            String note = "failed to update rule in the database by ID " + id;
+            log.error(note);
+            taskResult.setSucceeded(false);
+            taskResult.setNote(note);
+        }
         log.info("rule has been updated by ID " + id);
         taskResult.setSucceeded(true);
         return taskResult;
@@ -206,6 +223,22 @@ public class RuleService {
             taskResult.setSucceeded(false);
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
+        }
+        boolean deleted;
+        try {
+            deleted = ruleDao.deleteById(id);
+        } catch (SQLException e) {
+            String note = "failed to delete rule from the database by ID " + id;
+            log.error(note, e);
+            taskResult.setSucceeded(false);
+            taskResult.setNote(note + ": " + e.getMessage());
+            return taskResult;
+        }
+        if (!deleted) {
+            String note = "failed to delete rule from the database by ID " + id;
+            log.error(note);
+            taskResult.setSucceeded(false);
+            taskResult.setNote(note);
         }
         log.info("rule has been deleted by ID " + id);
         taskResult.setSucceeded(true);
