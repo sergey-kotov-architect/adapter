@@ -5,10 +5,7 @@ import com.sergeykotov.adapter.queue.TaskQueueDto;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.task.TaskResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,13 +22,13 @@ public class QueueController {
     }
 
     @GetMapping
-    public TaskQueueDto getTaskQueueDto(@RequestParam String authorization) {
+    public TaskQueueDto getTaskQueueDto(@RequestHeader String authorization) {
         authorizationService.authorize(authorization);
         return taskQueue.getTaskQueueDto();
     }
 
     @GetMapping("/task")
-    public List<TaskResult> getTaskResults(@RequestParam String authorization) {
+    public List<TaskResult> getTaskResults(@RequestHeader String authorization) {
         authorizationService.authorize(authorization);
         return taskQueue.getTaskResults();
     }

@@ -26,31 +26,31 @@ public class RuleController {
     }
 
     @GetMapping
-    public List<Rule> getRules(@RequestParam String authorization) {
+    public List<Rule> getRules(@RequestHeader String authorization) {
         authorizationService.authorize(authorization);
         return ruleService.getRules();
     }
 
     @GetMapping("/{id}")
-    public Rule getRule(@PathVariable long id, @RequestParam String authorization) throws NotFoundException {
+    public Rule getRule(@PathVariable long id, @RequestHeader String authorization) throws NotFoundException {
         authorizationService.authorize(authorization);
         return ruleService.getRule(id);
     }
 
     @PostMapping
-    public void createRule(@RequestParam String authorization, @RequestBody @Valid Rule rule) {
+    public void createRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
         taskQueue.submitCreateRuleTask(ruleService, rule);
     }
 
     @PutMapping("/{id}")
-    public void updateRule(@PathVariable long id, @RequestParam String authorization, @RequestBody @Valid Rule rule) {
+    public void updateRule(@PathVariable long id, @RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
         taskQueue.submitUpdateRuleTask(ruleService, id, rule);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRule(@PathVariable long id, @RequestParam String authorization) {
+    public void deleteRule(@PathVariable long id, @RequestHeader String authorization) {
         authorizationService.authorize(authorization);
         taskQueue.submitDeleteRuleTask(ruleService, id);
     }

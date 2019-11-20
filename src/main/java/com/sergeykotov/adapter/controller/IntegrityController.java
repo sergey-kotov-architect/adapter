@@ -24,13 +24,14 @@ public class IntegrityController {
     }
 
     @GetMapping
-    public IntegrityDto verifyIntegrity(@RequestParam String authorization) {
+    public IntegrityDto verifyIntegrity(@RequestHeader String authorization) {
         authorizationService.authorize(authorization);
         return integrityService.verify();
     }
 
     @PostMapping
-    public void restoreIntegrity() {
+    public void restoreIntegrity(@RequestHeader String authorization) {
+        authorizationService.authorize(authorization);
         taskQueue.submitRestoreIntegrityTask(integrityService);
     }
 }
