@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -13,8 +14,10 @@ public class Rule {
     private long id;
 
     @NotEmpty
+    @Size(max = 255)
     private String name;
 
+    @Size(max = 4000)
     private String note;
 
     //key - system name
