@@ -37,9 +37,9 @@ public class RuleController {
         taskQueue.submitCreateRuleTask(ruleService, rule);
     }
 
-    @PutMapping
-    public void updateRule(@RequestBody @Valid Rule rule) {
-        taskQueue.submitUpdateRuleTask(ruleService, rule);
+    @PutMapping("/{id}")
+    public void updateRule(@PathVariable long id, @RequestBody @Valid Rule rule) {
+        taskQueue.submitUpdateRuleTask(ruleService, id, rule);
     }
 
     @DeleteMapping("/{id}")

@@ -10,11 +10,13 @@ import java.time.LocalDateTime;
 
 public class UpdateRuleTask implements Task {
     private final RuleService ruleService;
+    private final long id;
     private final Rule rule;
     private final LocalDateTime submissionTime = LocalDateTime.now();
 
-    public UpdateRuleTask(RuleService ruleService, Rule rule) {
+    public UpdateRuleTask(RuleService ruleService, long id, Rule rule) {
         this.ruleService = ruleService;
+        this.id = id;
         this.rule = rule;
     }
 
@@ -30,12 +32,12 @@ public class UpdateRuleTask implements Task {
 
     @Override
     public String getNote() {
-        return rule.getName();
+        return "ID " + id;
     }
 
     @Override
     public TaskResult execute() {
-        return ruleService.update(rule);
+        return ruleService.update(id, rule);
     }
 
     @Override

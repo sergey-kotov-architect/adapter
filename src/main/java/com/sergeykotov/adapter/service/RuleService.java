@@ -98,16 +98,16 @@ public class RuleService {
         return taskResult;
     }
 
-    public TaskResult update(Rule rule) {
+    public TaskResult update(long id, Rule rule) {
         TaskResult taskResult = new TaskResult();
-        log.info("updating rule " + rule + "...");
+        log.info("updating rule by ID " + id + "...");
         Map<System, Rule> affectedSystems = new HashMap<>(systems.size() * 2);
         for (System system : systems) {
             Rule existingRule = null;
             try {
-                existingRule = getRule(rule.getId());
+                existingRule = getRule(id);
             } catch (NotFoundException e) {
-                log.error("failed to get previous state of rule " + rule + " on system " + system);
+                log.error("failed to get previous state of rule ID " + id + " on system " + system);
             }
             boolean updated = system.updateRule(rule);
             if (updated) {
@@ -115,7 +115,7 @@ public class RuleService {
                 continue;
             }
             List<String> notes = new ArrayList<>();
-            String note = "failed to update rule " + rule + " on system " + system;
+            String note = "failed to update rule ID " + id + " on system " + system;
             log.error(note);
             notes.add(note);
             for (Map.Entry<System, Rule> entry : affectedSystems.entrySet()) {
@@ -123,8 +123,8 @@ public class RuleService {
                 Rule previousRule = entry.getValue();
                 boolean restored = affectedSystem.updateRule(previousRule);
                 if (!restored) {
-                    String format = "integrity has been violated: system %s has rule %s in invalid state";
-                    String message = String.format(format, affectedSystem, rule);
+                    String format = "integrity has been violated: system %s has rule ID %d in invalid state";
+                    String message = String.format(format, affectedSystem, id);
                     log.error(message);
                     notes.add(message);
                 }
@@ -133,7 +133,7 @@ public class RuleService {
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
         }
-        log.info("rule " + rule + " has been updated");
+        log.info("rule has been updated by ID " + id);
         taskResult.setExecuted(true);
         return taskResult;
     }
@@ -159,14 +159,14 @@ public class RuleService {
                 continue;
             }
             List<String> notes = new ArrayList<>();
-            String note = "failed to delete rule " + rule + " on system " + system;
+            String note = "failed to delete rule ID " + id + " on system " + system;
             log.error(note);
             notes.add(note);
             for (System affectedSystem : affectedSystems) {
                 boolean created = affectedSystem.createRule(rule);
                 if (!created) {
-                    String format = "integrity has been violated: system %s must contain rule %s";
-                    String message = String.format(format, affectedSystem, rule);
+                    String format = "integrity has been violated: system %s must contain rule ID %d";
+                    String message = String.format(format, affectedSystem, id);
                     log.error(message);
                     notes.add(message);
                 }

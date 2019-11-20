@@ -54,8 +54,8 @@ public class TaskQueue {
         submitTask(task);
     }
 
-    public void submitUpdateRuleTask(RuleService ruleService, Rule rule) {
-        Task task = new UpdateRuleTask(ruleService, rule);
+    public void submitUpdateRuleTask(RuleService ruleService, long id, Rule rule) {
+        Task task = new UpdateRuleTask(ruleService, id, rule);
         submitTask(task);
     }
 
