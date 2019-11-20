@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Component
 public class TaskQueue {
     private static final Logger log = Logger.getLogger(TaskQueue.class);
-    private static final int CAPACITY = 10;
+    private static final int CAPACITY = Integer.MAX_VALUE;
 
     private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
     private final List<TaskResult> taskResults = new ArrayList<>();
