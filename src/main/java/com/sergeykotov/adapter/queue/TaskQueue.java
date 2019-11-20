@@ -58,7 +58,7 @@ public class TaskQueue {
             taskResults = taskResultDao.extract();
         } catch (SQLException e) {
             log.error("failed to extract task results", e);
-            throw new ExtractionException();
+            throw new ExtractionException(e);
         }
         log.info(taskResults.size() + " task results have been extracted");
         return taskResults;

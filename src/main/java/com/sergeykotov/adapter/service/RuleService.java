@@ -1,6 +1,8 @@
 package com.sergeykotov.adapter.service;
 
+import com.sergeykotov.adapter.dao.RuleDao;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.exception.ExtractionException;
 import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.system1.System1;
@@ -10,15 +12,19 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class RuleService {
     private static final Logger log = Logger.getLogger(RuleService.class);
+    private final RuleDao ruleDao;
     private final List<System> systems;
 
     @Autowired
-    public RuleService(System1 system1, System2 system2) {
+    public RuleService(RuleDao ruleDao, System1 system1, System2 system2) {
+        this.ruleDao = ruleDao;
         List<System> systems = new ArrayList<>();
         systems.add(system1);
         systems.add(system2);
@@ -31,12 +37,16 @@ public class RuleService {
 
     public List<Rule> getRules() {
         log.info("extracting rules...");
-        List<Rule> rules = new ArrayList<>();
+        List<Rule> rules;
+        try {
+            rules = ruleDao.extract();
+        } catch (SQLException e) {
+            log.error("failed to extract rules from the database", e);
+            throw new ExtractionException(e);
+        }
+        log.info(rules.size() + " rules have been extracted from the database");
         for (System system : systems) {
             List<Rule> systemRules = system.getRules();
-            if (rules.isEmpty()) {
-                rules = systemRules;
-            }
             String systemName = system.getName();
             for (Rule systemRule : systemRules) {
                 String json = systemRule.getSystemRuleMap().get(systemName);
@@ -52,12 +62,16 @@ public class RuleService {
 
     public Rule getRule(long id) throws NotFoundException {
         log.info("extracting rule by ID " + id + "...");
-        Rule rule = null;
+        Rule rule;
+        try {
+            rule = ruleDao.extractById(id);
+        } catch (SQLException e) {
+            log.error("failed to extract rule from the database by ID " + id, e);
+            throw new ExtractionException(e);
+        }
+        log.info("rule has been extracted from the database by ID " + id);
         for (System system : systems) {
             Rule systemRule = system.getRule(id);
-            if (rule == null) {
-                rule = systemRule;
-            }
             String systemName = system.getName();
             String json = systemRule.getSystemRuleMap().get(systemName);
             rule.getSystemRuleMap().put(system.getName(), json);
@@ -91,6 +105,24 @@ public class RuleService {
             }
             taskResult.setSucceeded(false);
             taskResult.setNote(String.join(", ", notes));
+            return taskResult;
+        }
+        rule.setCreationTime(LocalDateTime.now());
+        boolean created;
+        try {
+            created = ruleDao.create(rule);
+        } catch (SQLException e) {
+            String note = "failed to save rule " + rule + " to the database";
+            log.error(note, e);
+            taskResult.setSucceeded(false);
+            taskResult.setNote(note + ": " + e.getMessage());
+            return taskResult;
+        }
+        if (!created) {
+            String note = "failed to save rule " + rule + " to the database";
+            log.error(note);
+            taskResult.setSucceeded(false);
+            taskResult.setNote(note);
             return taskResult;
         }
         log.info("rule " + rule + " has been created");

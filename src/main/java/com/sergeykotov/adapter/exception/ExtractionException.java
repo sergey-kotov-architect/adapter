@@ -5,4 +5,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "failed to extract data from the systems")
 public class ExtractionException extends RuntimeException {
+    public ExtractionException() {
+    }
+
+    public ExtractionException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -1,6 +1,7 @@
 package com.sergeykotov.adapter.dao;
 
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -17,6 +18,8 @@ public class RuleDao {
     private static final String CREATE_CMD = "insert into rule (name, note, creation_time) values (?, ?, ?);";
     private static final String EXTRACT_CMD =
             "select r.id, r.name, r.note, r.creation_time, r.last_update_time from rule r;";
+    private static final String EXTRACT_BY_ID_CMD =
+            "select r.name, r.note, r.creation_time, r.last_update_time from rule r where r.id = ?;";
     private static final String UPDATE_CMD = "update rule set name = ?, note = ?, last_update_time = ? where id = ?";
     private static final String DELETE_CMD = "delete from rule where id = ?";
 
@@ -36,15 +39,42 @@ public class RuleDao {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             List<Rule> rules = new ArrayList<>();
             while (resultSet.next()) {
+                String creationTime = resultSet.getString("creation_time");
+                String lastUpdateTime = resultSet.getString("last_update_time");
+
                 Rule rule = new Rule();
                 rule.setId(resultSet.getLong("id"));
                 rule.setName(resultSet.getString("name"));
                 rule.setNote(resultSet.getString("note"));
-                rule.setCreationTime(LocalDateTime.parse(resultSet.getString("creation_time")));
-                rule.setLastUpdateTime(LocalDateTime.parse(resultSet.getString("last_update_time")));
+                rule.setCreationTime(creationTime == null ? null : LocalDateTime.parse(creationTime));
+                rule.setLastUpdateTime(lastUpdateTime == null ? null : LocalDateTime.parse(lastUpdateTime));
                 rules.add(rule);
             }
             return Collections.unmodifiableList(rules);
+        }
+    }
+
+    public Rule extractById(long id) throws SQLException, NotFoundException {
+        ResultSet resultSet = null;
+        try (Connection connection = ConnectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(EXTRACT_BY_ID_CMD)) {
+            preparedStatement.setLong(1, id);
+            resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                throw new NotFoundException();
+            }
+            String creationTime = resultSet.getString("creation_time");
+            String lastUpdateTime = resultSet.getString("last_update_time");
+            Rule rule = new Rule();
+            rule.setName(resultSet.getString("name"));
+            rule.setNote(resultSet.getString("note"));
+            rule.setCreationTime(creationTime == null ? null : LocalDateTime.parse(creationTime));
+            rule.setLastUpdateTime(lastUpdateTime == null ? null : LocalDateTime.parse(lastUpdateTime));
+            return rule;
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
     }
 

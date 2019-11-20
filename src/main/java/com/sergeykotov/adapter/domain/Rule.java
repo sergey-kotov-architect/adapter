@@ -59,6 +59,7 @@ public class Rule {
         this.note = note;
     }
 
+    @JsonProperty("creation_time")
     public LocalDateTime getCreationTime() {
         return creationTime;
     }
@@ -67,6 +68,7 @@ public class Rule {
         this.creationTime = creationTime;
     }
 
+    @JsonProperty("last_update_time")
     public LocalDateTime getLastUpdateTime() {
         return lastUpdateTime;
     }
