@@ -37,7 +37,7 @@ Web-service that provides REST API to manage business rules and its integrity on
 # TODO
 * implement integrity restoration
 * verify rule state while integrity verification
-* make task queue capacity, task results capacity, api key configurable
+* make task queue capacity, api key, connection pool parameters configurable
 * add unit tests
 * manage rule asynchronically (one thread per system) using thread pool
 * take tasks from external message queue (ActiveMQ)

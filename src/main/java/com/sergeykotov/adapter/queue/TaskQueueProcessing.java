@@ -1,26 +1,26 @@
 package com.sergeykotov.adapter.queue;
 
+import com.sergeykotov.adapter.dao.TaskResultDao;
 import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskDto;
 import com.sergeykotov.adapter.task.TaskResult;
 import org.apache.log4j.Logger;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class TaskQueueProcessing extends Thread {
     private static final Logger log = Logger.getLogger(TaskQueueProcessing.class);
     private static final String NAME = "task-queue-processing";
-    private static final int TASK_RESULTS_CAPACITY = Integer.MAX_VALUE;
 
     private final BlockingQueue<Task> queue;
-    private final List<TaskResult> taskResults;
+    private final TaskResultDao taskResultDao;
     private Task task;
 
-    public TaskQueueProcessing(BlockingQueue<Task> queue, List<TaskResult> taskResults) {
+    public TaskQueueProcessing(BlockingQueue<Task> queue, TaskResultDao taskResultDao) {
         this.queue = queue;
-        this.taskResults = taskResults;
+        this.taskResultDao = taskResultDao;
         setName(NAME);
         setDaemon(true);
     }
@@ -49,10 +49,15 @@ public class TaskQueueProcessing extends Thread {
             taskResult.setStartTime(start.toString());
             taskResult.setEndTime(end.toString());
             taskResult.setTask(task.getTaskDto());
-            if (taskResults.size() == TASK_RESULTS_CAPACITY) {
-                taskResults.remove(0);
+            boolean saved = false;
+            try {
+                saved = taskResultDao.save(taskResult);
+            } catch (SQLException e) {
+                log.error(e);
             }
-            taskResults.add(taskResult);
+            if (!saved) {
+                log.error("failed to save task result");
+            }
             task = null;
         }
         log.error("task queue processing has been interrupted");

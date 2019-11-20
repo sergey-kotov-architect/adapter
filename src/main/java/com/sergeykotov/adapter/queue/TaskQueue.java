@@ -1,6 +1,8 @@
 package com.sergeykotov.adapter.queue;
 
+import com.sergeykotov.adapter.dao.TaskResultDao;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.exception.ExtractionException;
 import com.sergeykotov.adapter.exception.TaskQueueException;
 import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.service.RuleService;
@@ -12,9 +14,10 @@ import com.sergeykotov.adapter.task.implementation.DeleteRuleTask;
 import com.sergeykotov.adapter.task.implementation.RestoreIntegrityTask;
 import com.sergeykotov.adapter.task.implementation.UpdateRuleTask;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -25,11 +28,14 @@ public class TaskQueue {
     private static final Logger log = Logger.getLogger(TaskQueue.class);
     private static final int CAPACITY = Integer.MAX_VALUE;
 
+    private final TaskResultDao taskResultDao;
     private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
-    private final List<TaskResult> taskResults = new ArrayList<>();
-    private final TaskQueueProcessing taskQueueProcessing = new TaskQueueProcessing(queue, taskResults);
+    private final TaskQueueProcessing taskQueueProcessing;
 
-    public TaskQueue() {
+    @Autowired
+    public TaskQueue(TaskResultDao taskResultDao) {
+        this.taskResultDao = taskResultDao;
+        taskQueueProcessing = new TaskQueueProcessing(queue, taskResultDao);
         taskQueueProcessing.start();
     }
 
@@ -46,7 +52,12 @@ public class TaskQueue {
     }
 
     public List<TaskResult> getTaskResults() {
-        return taskResults;
+        try {
+            return taskResultDao.extract();
+        } catch (SQLException e) {
+            log.error("failed to extract task results", e);
+            throw new ExtractionException();
+        }
     }
 
     public void submitCreateRuleTask(RuleService ruleService, Rule rule) {
