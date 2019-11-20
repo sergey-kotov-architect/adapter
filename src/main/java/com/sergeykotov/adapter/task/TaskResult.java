@@ -6,7 +6,7 @@ public class TaskResult {
     private String startTime;
     private String endTime;
     private TaskDto task;
-    private boolean executed;
+    private boolean succeeded;
     private String note;
 
     public TaskResult() {
@@ -38,12 +38,12 @@ public class TaskResult {
         this.task = task;
     }
 
-    public boolean isExecuted() {
-        return executed;
+    public boolean isSucceeded() {
+        return succeeded;
     }
 
-    public void setExecuted(boolean executed) {
-        this.executed = executed;
+    public void setSucceeded(boolean succeeded) {
+        this.succeeded = succeeded;
     }
 
     public String getNote() {

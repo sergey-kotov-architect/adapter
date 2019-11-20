@@ -51,12 +51,12 @@ public class IntegrityService {
             Thread.sleep(15_000L); //latency simulation
         } catch (InterruptedException e) {
             log.error("integrity restoration has been interrupted");
-            taskResult.setExecuted(false);
+            taskResult.setSucceeded(false);
             return taskResult;
         }
         log.info("integrity has been restored");
 
-        taskResult.setExecuted(true);
+        taskResult.setSucceeded(true);
         return taskResult;
     }
 

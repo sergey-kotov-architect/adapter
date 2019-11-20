@@ -89,12 +89,12 @@ public class RuleService {
                     notes.add(message);
                 }
             }
-            taskResult.setExecuted(false);
+            taskResult.setSucceeded(false);
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
         }
         log.info("rule " + rule + " has been created");
-        taskResult.setExecuted(true);
+        taskResult.setSucceeded(true);
         return taskResult;
     }
 
@@ -129,12 +129,12 @@ public class RuleService {
                     notes.add(message);
                 }
             }
-            taskResult.setExecuted(false);
+            taskResult.setSucceeded(false);
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
         }
         log.info("rule has been updated by ID " + id);
-        taskResult.setExecuted(true);
+        taskResult.setSucceeded(true);
         return taskResult;
     }
 
@@ -147,7 +147,7 @@ public class RuleService {
         } catch (NotFoundException e) {
             String note = "failed to delete rule by ID " + id + ": rule not found";
             log.error(note);
-            taskResult.setExecuted(false);
+            taskResult.setSucceeded(false);
             taskResult.setNote(note);
             return taskResult;
         }
@@ -171,12 +171,12 @@ public class RuleService {
                     notes.add(message);
                 }
             }
-            taskResult.setExecuted(false);
+            taskResult.setSucceeded(false);
             taskResult.setNote(String.join(", ", notes));
             return taskResult;
         }
         log.info("rule has been deleted by ID " + id);
-        taskResult.setExecuted(true);
+        taskResult.setSucceeded(true);
         return taskResult;
     }
 }
