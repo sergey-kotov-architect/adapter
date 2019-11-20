@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -43,20 +44,20 @@ public class IntegrityService {
         return integrityDto;
     }
 
-    public TaskResult restore() {
+    public TaskResult restore(List<Rule> rules) {
         TaskResult taskResult = new TaskResult();
         log.info("restoring integrity...");
-        //TODO: implement integrity restoration
-        try {
-            Thread.sleep(15_000L); //latency simulation
-        } catch (InterruptedException e) {
-            log.error("integrity restoration has been interrupted");
-            taskResult.setSucceeded(false);
-            return taskResult;
+        List<System> systems = ruleService.getSystems();
+        List<Rule> systemsRules = ruleService.getRules();
+        List<String> notes = restore(systems, rules, systemsRules);
+        boolean succeeded = notes.isEmpty();
+        if (succeeded) {
+            log.info("integrity has been restored");
+        } else {
+            log.error("failed to restore integrity");
+            taskResult.setNote(String.join(", ", notes));
         }
-        log.info("integrity has been restored");
-
-        taskResult.setSucceeded(true);
+        taskResult.setSucceeded(succeeded);
         return taskResult;
     }
 
@@ -71,5 +72,9 @@ public class IntegrityService {
             }
         }
         return notes;
+    }
+
+    private List<String> restore(List<System> systems, List<Rule> rules, List<Rule> systemsRules) {
+        return Collections.emptyList();
     }
 }

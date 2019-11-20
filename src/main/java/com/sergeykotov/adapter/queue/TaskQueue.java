@@ -64,8 +64,8 @@ public class TaskQueue {
         submitTask(task);
     }
 
-    public void submitRestoreIntegrityTask(IntegrityService integrityService) {
-        Task task = new RestoreIntegrityTask(integrityService);
+    public void submitRestoreIntegrityTask(IntegrityService integrityService, List<Rule> rules) {
+        Task task = new RestoreIntegrityTask(integrityService, rules);
         submitTask(task);
     }
 

@@ -1,11 +1,15 @@
 package com.sergeykotov.adapter.controller;
 
 import com.sergeykotov.adapter.domain.IntegrityDto;
+import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.IntegrityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/integrity")
@@ -30,8 +34,8 @@ public class IntegrityController {
     }
 
     @PostMapping
-    public void restoreIntegrity(@RequestHeader String authorization) {
+    public void restoreIntegrity(@RequestHeader String authorization, @RequestBody @Valid List<Rule> rules) {
         authorizationService.authorize(authorization);
-        taskQueue.submitRestoreIntegrityTask(integrityService);
+        taskQueue.submitRestoreIntegrityTask(integrityService, rules);
     }
 }
