@@ -53,10 +53,10 @@ public class TaskQueueProcessing extends Thread {
             try {
                 saved = taskResultDao.save(taskResult);
             } catch (SQLException e) {
-                log.error(e);
+                log.error("failed to save task " + task + " result: " + taskResult.isSucceeded(), e);
             }
             if (!saved) {
-                log.error("failed to save task result");
+                log.error("failed to save task " + task + " result: " + taskResult.isSucceeded());
             }
             task = null;
         }
