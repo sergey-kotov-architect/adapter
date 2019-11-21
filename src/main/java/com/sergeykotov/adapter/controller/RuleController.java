@@ -31,7 +31,7 @@ public class RuleController {
         return ruleService.getRules();
     }
 
-    @GetMapping("/json")
+    @GetMapping("/find")
     public Rule getRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) throws NotFoundException {
         authorizationService.authorize(authorization);
         return ruleService.getRule(rule);
