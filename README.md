@@ -36,8 +36,6 @@ Web-service that provides REST API to manage business rules and its integrity on
 * SQLite Studio
 
 # TODO
-* implement integrity restoration
-* verify rule state while integrity verification
 * make task queue capacity, api key, connection pool parameters configurable
 * add unit tests
 * manage rule asynchronically (one thread per system) using thread pool
