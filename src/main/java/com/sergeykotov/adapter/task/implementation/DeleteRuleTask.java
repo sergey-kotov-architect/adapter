@@ -1,5 +1,6 @@
 package com.sergeykotov.adapter.task.implementation;
 
+import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskResult;
@@ -9,12 +10,12 @@ import java.time.LocalDateTime;
 
 public class DeleteRuleTask implements Task {
     private final RuleService ruleService;
-    private final long id;
+    private final Rule rule;
     private final LocalDateTime submissionTime = LocalDateTime.now();
 
-    public DeleteRuleTask(RuleService ruleService, long id) {
+    public DeleteRuleTask(RuleService ruleService, Rule rule) {
         this.ruleService = ruleService;
-        this.id = id;
+        this.rule = rule;
     }
 
     @Override
@@ -29,12 +30,12 @@ public class DeleteRuleTask implements Task {
 
     @Override
     public String getNote() {
-        return "ID " + id;
+        return rule.toString();
     }
 
     @Override
     public TaskResult execute() {
-        return ruleService.delete(id);
+        return ruleService.delete(rule);
     }
 
     @Override

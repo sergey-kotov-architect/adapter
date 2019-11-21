@@ -90,13 +90,13 @@ public class TaskQueue {
         submitTask(task);
     }
 
-    public void submitUpdateRuleTask(RuleService ruleService, long id, Rule rule) {
-        Task task = new UpdateRuleTask(ruleService, id, rule);
+    public void submitUpdateRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new UpdateRuleTask(ruleService, rule);
         submitTask(task);
     }
 
-    public void submitDeleteRuleTask(RuleService ruleService, long id) {
-        Task task = new DeleteRuleTask(ruleService, id);
+    public void submitDeleteRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new DeleteRuleTask(ruleService, rule);
         submitTask(task);
     }
 

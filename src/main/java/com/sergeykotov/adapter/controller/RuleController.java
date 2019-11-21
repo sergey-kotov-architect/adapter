@@ -31,10 +31,10 @@ public class RuleController {
         return ruleService.getRules();
     }
 
-    @GetMapping("/{id}")
-    public Rule getRule(@PathVariable long id, @RequestHeader String authorization) throws NotFoundException {
+    @GetMapping("/id")
+    public Rule getRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) throws NotFoundException {
         authorizationService.authorize(authorization);
-        return ruleService.getRule(id);
+        return ruleService.getRule(rule);
     }
 
     @PostMapping
@@ -43,15 +43,15 @@ public class RuleController {
         taskQueue.submitCreateRuleTask(ruleService, rule);
     }
 
-    @PutMapping("/{id}")
-    public void updateRule(@PathVariable long id, @RequestHeader String authorization, @RequestBody @Valid Rule rule) {
+    @PutMapping
+    public void updateRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        taskQueue.submitUpdateRuleTask(ruleService, id, rule);
+        taskQueue.submitUpdateRuleTask(ruleService, rule);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteRule(@PathVariable long id, @RequestHeader String authorization) {
+    @DeleteMapping
+    public void deleteRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        taskQueue.submitDeleteRuleTask(ruleService, id);
+        taskQueue.submitDeleteRuleTask(ruleService, rule);
     }
 }

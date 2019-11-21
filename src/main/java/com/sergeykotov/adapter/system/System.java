@@ -10,7 +10,7 @@ public interface System {
 
     List<Rule> getRules();
 
-    Rule getRule(long id) throws NotFoundException;
+    String getRule(Rule rule) throws NotFoundException;
 
     boolean createRule(Rule rule);
 

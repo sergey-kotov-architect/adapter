@@ -1,7 +1,6 @@
 package com.sergeykotov.adapter.system.system1;
 
 import com.sergeykotov.adapter.domain.Rule;
-import com.sergeykotov.adapter.exception.ExtractionException;
 import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.system.System;
 import org.apache.log4j.Logger;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class System1 implements System {
@@ -24,81 +24,56 @@ public class System1 implements System {
 
     @Override
     public List<Rule> getRules() {
-        log.info("extracting rules...");
-        try {
-            Thread.sleep(2_000L); //latency simulation
-        } catch (InterruptedException e) {
-            log.error("rules extraction has been interrupted");
-            throw new ExtractionException();
-        }
-        log.info(rules.size() + " rules have been extracted");
+        log.info("extracting rules from " + NAME + "...");
+        log.info(rules.size() + " rules have been extracted from " + NAME);
         return rules;
     }
 
     @Override
-    public Rule getRule(long id) throws NotFoundException {
-        log.info("extracting rule by ID " + id + "...");
-        Rule rule = rules.stream().filter(r -> r.getId() == id).findAny().orElseThrow(NotFoundException::new);
-        log.info("rule has been extracted by ID " + id);
-        return rule;
+    public String getRule(Rule rule) throws NotFoundException {
+        log.info("extracting rule " + rule + " from " + NAME + "...");
+        Rule existingRule = rules.stream().filter(r -> r.equals(rule)).findAny().orElseThrow(NotFoundException::new);
+        log.info("rule " + rule + " has been extracted from " + NAME);
+        return existingRule.getSystemRuleMap().get(NAME);
     }
 
     @Override
     public boolean createRule(Rule rule) {
-        log.info("creating rule " + rule + "...");
-        try {
-            Thread.sleep(15_000L); //latency simulation
-        } catch (InterruptedException e) {
-            log.error("rule creation has been interrupted");
-            return false;
-        }
+        log.info("creating rule " + rule + " on " + NAME + "...");
         if (rules.contains(rule)) {
-            log.error("failed to create rule " + rule);
+            log.error("failed to create rule " + rule + " on " + NAME);
             return false;
         }
         String json = "{}";
-        rule.getSystemRuleMap().put(getName(), json);
+        rule.getSystemRuleMap().put(NAME, json);
         rules.add(rule);
-        log.info("rule " + rule + " has been created");
+        log.info("rule " + rule + " has been created on " + NAME);
         return true;
     }
 
     @Override
     public boolean updateRule(Rule rule) {
-        log.info("updating rule " + rule + "...");
-        try {
-            Thread.sleep(15_000L); //latency simulation
-        } catch (InterruptedException e) {
-            log.error("rule update has been interrupted");
+        log.info("updating rule " + rule + " on " + NAME + "...");
+        Optional<Rule> existingRule = rules.stream().filter(r -> r.equals(rule)).findAny();
+        if (!existingRule.isPresent()) {
+            log.error("failed to update rule " + rule + " on " + NAME + ": not found");
             return false;
         }
-        Rule existingRule;
-        try {
-            existingRule = getRule(rule.getId());
-        } catch (NotFoundException e) {
-            log.error("failed to update rule " + rule + ", not found by ID " + rule.getId());
-            return false;
-        }
-        existingRule.setNote(rule.getNote());
-        log.info("rule " + rule + " has been updated");
+        String json = rule.getSystemRuleMap().get(NAME);
+        existingRule.get().getSystemRuleMap().put(NAME, json);
+        log.info("rule " + rule + " has been updated on " + NAME);
         return true;
     }
 
     @Override
     public boolean deleteRule(Rule rule) {
-        log.info("deleting rule " + rule + "...");
-        try {
-            Thread.sleep(10_000L); //latency simulation
-        } catch (InterruptedException e) {
-            log.error("rule deletion has been interrupted");
-            return false;
-        }
+        log.info("deleting rule " + rule + " on " + NAME + "...");
         boolean deleted = rules.remove(rule);
         if (!deleted) {
-            log.error("failed to delete rule " + rule);
+            log.error("failed to delete rule " + rule + " on " + NAME);
             return false;
         }
-        log.info("rule " + rule + " has been deleted");
+        log.info("rule " + rule + " has been deleted on " + NAME);
         return true;
     }
 
