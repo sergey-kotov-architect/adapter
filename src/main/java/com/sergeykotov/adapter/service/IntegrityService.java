@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -97,7 +98,8 @@ public class IntegrityService {
                     continue;
                 }
                 String json = rule.getSystemRuleMap().get(system.getName());
-                if (!json.equals(systemRule.get().getSystemRuleMap().get(system.getName()))) {
+                String systemJson = systemRule.get().getSystemRuleMap().get(system.getName());
+                if (!Objects.equals(json, systemJson)) {
                     boolean updated = system.updateRule(rule);
                     if (!updated) {
                         String note = "failed to update rule " + rule + " on " + system;
