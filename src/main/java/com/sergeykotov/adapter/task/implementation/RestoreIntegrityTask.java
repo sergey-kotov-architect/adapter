@@ -11,13 +11,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class RestoreIntegrityTask implements Task {
+    private final long ID;
     private final IntegrityService integrityService;
     private final List<Rule> rules;
     private final LocalDateTime submissionTime = LocalDateTime.now();
 
-    public RestoreIntegrityTask(IntegrityService integrityService, List<Rule> rules) {
+    public RestoreIntegrityTask(long ID, IntegrityService integrityService, List<Rule> rules) {
+        this.ID = ID;
         this.integrityService = integrityService;
         this.rules = Collections.unmodifiableList(rules);
+    }
+
+    @Override
+    public long getID() {
+        return ID;
     }
 
     @Override

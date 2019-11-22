@@ -5,6 +5,7 @@ import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.IntegrityService;
+import com.sergeykotov.adapter.task.TaskDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,8 @@ public class IntegrityController {
     }
 
     @PostMapping
-    public void restoreIntegrity(@RequestHeader String authorization, @RequestBody @Valid List<Rule> rules) {
+    public TaskDto restoreIntegrity(@RequestHeader String authorization, @RequestBody @Valid List<Rule> rules) {
         authorizationService.authorize(authorization);
-        taskQueue.submitRestoreIntegrityTask(integrityService, rules);
+        return taskQueue.submitRestoreIntegrityTask(integrityService, rules);
     }
 }

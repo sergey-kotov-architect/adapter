@@ -9,13 +9,20 @@ import com.sergeykotov.adapter.task.TaskType;
 import java.time.LocalDateTime;
 
 public class UpdateRuleTask implements Task {
+    private final long ID;
     private final RuleService ruleService;
     private final Rule rule;
     private final LocalDateTime submissionTime = LocalDateTime.now();
 
-    public UpdateRuleTask(RuleService ruleService, Rule rule) {
+    public UpdateRuleTask(long ID, RuleService ruleService, Rule rule) {
+        this.ID = ID;
         this.ruleService = ruleService;
         this.rule = rule;
+    }
+
+    @Override
+    public long getID() {
+        return ID;
     }
 
     @Override

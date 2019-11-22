@@ -23,12 +23,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
 public class TaskQueue {
     private static final Logger log = Logger.getLogger(TaskQueue.class);
     private static final int CAPACITY = Integer.MAX_VALUE;
+    private static final AtomicLong idCounter = new AtomicLong(1);
 
     private final TaskResultDao taskResultDao;
     private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
@@ -85,24 +87,28 @@ public class TaskQueue {
         return count;
     }
 
-    public void submitCreateRuleTask(RuleService ruleService, Rule rule) {
-        Task task = new CreateRuleTask(ruleService, rule);
+    public TaskDto submitCreateRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new CreateRuleTask(idCounter.getAndIncrement(), ruleService, rule);
         submitTask(task);
+        return task.getTaskDto();
     }
 
-    public void submitUpdateRuleTask(RuleService ruleService, Rule rule) {
-        Task task = new UpdateRuleTask(ruleService, rule);
+    public TaskDto submitUpdateRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new UpdateRuleTask(idCounter.getAndIncrement(), ruleService, rule);
         submitTask(task);
+        return task.getTaskDto();
     }
 
-    public void submitDeleteRuleTask(RuleService ruleService, Rule rule) {
-        Task task = new DeleteRuleTask(ruleService, rule);
+    public TaskDto submitDeleteRuleTask(RuleService ruleService, Rule rule) {
+        Task task = new DeleteRuleTask(idCounter.getAndIncrement(), ruleService, rule);
         submitTask(task);
+        return task.getTaskDto();
     }
 
-    public void submitRestoreIntegrityTask(IntegrityService integrityService, List<Rule> rules) {
-        Task task = new RestoreIntegrityTask(integrityService, rules);
+    public TaskDto submitRestoreIntegrityTask(IntegrityService integrityService, List<Rule> rules) {
+        Task task = new RestoreIntegrityTask(idCounter.getAndIncrement(), integrityService, rules);
         submitTask(task);
+        return task.getTaskDto();
     }
 
     private void submitTask(Task task) {

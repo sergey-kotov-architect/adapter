@@ -5,6 +5,7 @@ import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.RuleService;
+import com.sergeykotov.adapter.task.TaskDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,20 +39,20 @@ public class RuleController {
     }
 
     @PostMapping
-    public void createRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
+    public TaskDto createRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        taskQueue.submitCreateRuleTask(ruleService, rule);
+        return taskQueue.submitCreateRuleTask(ruleService, rule);
     }
 
     @PutMapping
-    public void updateRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
+    public TaskDto updateRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        taskQueue.submitUpdateRuleTask(ruleService, rule);
+        return taskQueue.submitUpdateRuleTask(ruleService, rule);
     }
 
     @DeleteMapping
-    public void deleteRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
+    public TaskDto deleteRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        taskQueue.submitDeleteRuleTask(ruleService, rule);
+        return taskQueue.submitDeleteRuleTask(ruleService, rule);
     }
 }
