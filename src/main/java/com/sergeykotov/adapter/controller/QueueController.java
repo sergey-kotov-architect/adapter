@@ -1,5 +1,6 @@
 package com.sergeykotov.adapter.controller;
 
+import com.sergeykotov.adapter.dto.TaskResultsDeletion;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.queue.TaskQueueDto;
 import com.sergeykotov.adapter.service.AuthorizationService;
@@ -34,7 +35,8 @@ public class QueueController {
     }
 
     @DeleteMapping("/task")
-    public int deleteTaskResults(@RequestHeader String authorization, @RequestHeader("date_time") String dateTime) {
+    public TaskResultsDeletion deleteTaskResults(@RequestHeader String authorization,
+                                                 @RequestHeader("date-time") String dateTime) {
         authorizationService.authorize(authorization);
         return taskQueue.deleteTaskResults(dateTime);
     }

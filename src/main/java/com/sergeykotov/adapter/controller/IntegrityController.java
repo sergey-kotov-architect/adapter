@@ -1,7 +1,7 @@
 package com.sergeykotov.adapter.controller;
 
-import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.dto.IntegrityDto;
 import com.sergeykotov.adapter.queue.TaskQueue;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.IntegrityService;

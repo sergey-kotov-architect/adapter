@@ -1,7 +1,7 @@
 package com.sergeykotov.adapter.service;
 
-import com.sergeykotov.adapter.domain.IntegrityDto;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.dto.IntegrityDto;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.task.TaskResult;
 import org.apache.log4j.Logger;

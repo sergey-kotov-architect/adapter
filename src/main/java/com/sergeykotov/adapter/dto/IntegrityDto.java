@@ -1,4 +1,4 @@
-package com.sergeykotov.adapter.domain;
+package com.sergeykotov.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

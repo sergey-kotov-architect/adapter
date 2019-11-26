@@ -2,6 +2,7 @@ package com.sergeykotov.adapter.queue;
 
 import com.sergeykotov.adapter.dao.TaskResultDao;
 import com.sergeykotov.adapter.domain.Rule;
+import com.sergeykotov.adapter.dto.TaskResultsDeletion;
 import com.sergeykotov.adapter.exception.DatabaseException;
 import com.sergeykotov.adapter.exception.InvalidInputException;
 import com.sergeykotov.adapter.exception.TaskQueueException;
@@ -68,7 +69,7 @@ public class TaskQueue {
         return taskResults;
     }
 
-    public int deleteTaskResults(String dateTime) {
+    public TaskResultsDeletion deleteTaskResults(String dateTime) {
         log.info("deleting task results earlier than " + dateTime + "...");
         try {
             dateTime = LocalDateTime.parse(dateTime).toString();
@@ -84,7 +85,10 @@ public class TaskQueue {
             throw new DatabaseException();
         }
         log.info(count + " task results have been deleted");
-        return count;
+        TaskResultsDeletion taskResultsDeletion = new TaskResultsDeletion();
+        taskResultsDeletion.setDeleted(true);
+        taskResultsDeletion.setCount(count);
+        return taskResultsDeletion;
     }
 
     public TaskDto submitCreateRuleTask(RuleService ruleService, Rule rule) {
