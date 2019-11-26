@@ -11,10 +11,10 @@ import java.security.NoSuchAlgorithmException;
 public class AuthorizationService {
     private static final String API_KEY = "2718258bae2d00062aaf47b91bafa4351914f2c63b24d72f64a1f92e0bf5548f";
 
-    private static String bytesToHex(byte[] hash) {
+    private String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder();
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
             if (hex.length() == 1) hexString.append('0');
             hexString.append(hex);
         }
