@@ -61,7 +61,7 @@ public class TaskQueue {
         try {
             taskResults = taskResultDao.extract();
         } catch (SQLException e) {
-            log.error("failed to extract task results", e);
+            log.error("failed to extract task results, error code: " + e.getErrorCode(), e);
             throw new DatabaseException();
         }
         log.info(taskResults.size() + " task results have been extracted");
@@ -80,7 +80,7 @@ public class TaskQueue {
         try {
             count = taskResultDao.delete(dateTime);
         } catch (SQLException e) {
-            log.error("failed to delete task results", e);
+            log.error("failed to delete task results, error code: " + e.getErrorCode(), e);
             throw new DatabaseException();
         }
         log.info(count + " task results have been deleted");
