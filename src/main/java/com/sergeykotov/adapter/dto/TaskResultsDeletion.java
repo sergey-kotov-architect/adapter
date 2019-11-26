@@ -3,6 +3,7 @@ package com.sergeykotov.adapter.dto;
 public class TaskResultsDeletion {
     private boolean deleted;
     private int count;
+    private String dateTime;
     private String note;
 
     public TaskResultsDeletion() {
@@ -22,6 +23,14 @@ public class TaskResultsDeletion {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getNote() {

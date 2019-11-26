@@ -92,6 +92,7 @@ public class TaskQueue {
         TaskResultsDeletion taskResultsDeletion = new TaskResultsDeletion();
         taskResultsDeletion.setDeleted(true);
         taskResultsDeletion.setCount(count);
+        taskResultsDeletion.setDateTime(dateTime);
         return taskResultsDeletion;
     }
 
