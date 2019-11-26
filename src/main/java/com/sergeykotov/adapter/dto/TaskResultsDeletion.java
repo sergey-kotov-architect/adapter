@@ -1,5 +1,7 @@
 package com.sergeykotov.adapter.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TaskResultsDeletion {
     private boolean deleted;
     private int count;
@@ -25,6 +27,7 @@ public class TaskResultsDeletion {
         this.count = count;
     }
 
+    @JsonProperty("date_time")
     public String getDateTime() {
         return dateTime;
     }
