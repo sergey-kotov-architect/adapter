@@ -37,6 +37,6 @@ public class IntegrityController {
     @PostMapping
     public TaskDto restoreIntegrity(@RequestHeader String authorization, @RequestBody @Valid List<Rule> rules) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitRestoreIntegrityTask(integrityService, rules);
+        return taskQueue.submitRestoreIntegrityTask(rules);
     }
 }

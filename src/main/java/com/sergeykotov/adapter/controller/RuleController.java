@@ -41,18 +41,18 @@ public class RuleController {
     @PostMapping
     public TaskDto createRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitCreateRuleTask(ruleService, rule);
+        return taskQueue.submitCreateRuleTask(rule);
     }
 
     @PutMapping
     public TaskDto updateRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitUpdateRuleTask(ruleService, rule);
+        return taskQueue.submitUpdateRuleTask(rule);
     }
 
     @DeleteMapping
     public TaskDto deleteRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitDeleteRuleTask(ruleService, rule);
+        return taskQueue.submitDeleteRuleTask(rule);
     }
 }
