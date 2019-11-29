@@ -7,6 +7,7 @@ import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.TaskDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,18 +40,21 @@ public class RuleController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto createRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
         return taskQueue.submitCreateRuleTask(rule);
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto updateRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
         return taskQueue.submitUpdateRuleTask(rule);
     }
 
     @DeleteMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto deleteRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
         return taskQueue.submitDeleteRuleTask(rule);

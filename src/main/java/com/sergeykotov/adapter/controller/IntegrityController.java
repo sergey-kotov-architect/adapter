@@ -7,6 +7,7 @@ import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.task.TaskDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +36,7 @@ public class IntegrityController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto restoreIntegrity(@RequestHeader String authorization, @RequestBody @Valid List<Rule> rules) {
         authorizationService.authorize(authorization);
         return taskQueue.submitRestoreIntegrityTask(rules);
