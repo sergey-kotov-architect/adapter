@@ -4,7 +4,8 @@ import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.dto.IntegrityDto;
 import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.task.TaskResult;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Service
 public class IntegrityService {
-    private static final Logger log = Logger.getLogger(IntegrityService.class);
+    private static final Logger log = LoggerFactory.getLogger(IntegrityService.class);
     private final RuleService ruleService;
 
     @Autowired

@@ -6,7 +6,8 @@ import com.sergeykotov.adapter.system.System;
 import com.sergeykotov.adapter.system.system1.System1;
 import com.sergeykotov.adapter.system.system2.System2;
 import com.sergeykotov.adapter.task.TaskResult;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 public class RuleService {
-    private static final Logger log = Logger.getLogger(RuleService.class);
+    private static final Logger log = LoggerFactory.getLogger(RuleService.class);
     private final List<System> systems;
 
     @Autowired

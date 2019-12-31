@@ -3,7 +3,8 @@ package com.sergeykotov.adapter.system.system1;
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.NotFoundException;
 import com.sergeykotov.adapter.system.System;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @Component
 public class System1 implements System {
-    private static final Logger log = Logger.getLogger(System1.class);
+    private static final Logger log = LoggerFactory.getLogger(System1.class);
     private static final String NAME = "System1";
 
     private List<Rule> rules = new ArrayList<>();

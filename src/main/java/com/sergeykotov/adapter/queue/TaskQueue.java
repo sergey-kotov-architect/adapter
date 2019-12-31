@@ -15,7 +15,8 @@ import com.sergeykotov.adapter.task.implementation.CreateRuleTask;
 import com.sergeykotov.adapter.task.implementation.DeleteRuleTask;
 import com.sergeykotov.adapter.task.implementation.RestoreIntegrityTask;
 import com.sergeykotov.adapter.task.implementation.UpdateRuleTask;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class TaskQueue {
-    private static final Logger log = Logger.getLogger(TaskQueue.class);
+    private static final Logger log = LoggerFactory.getLogger(TaskQueue.class);
     private static final int CAPACITY = Integer.MAX_VALUE;
     private static final AtomicLong idCounter = new AtomicLong(1);
 

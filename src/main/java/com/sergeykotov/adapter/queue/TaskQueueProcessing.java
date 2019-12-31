@@ -4,14 +4,15 @@ import com.sergeykotov.adapter.dao.TaskResultDao;
 import com.sergeykotov.adapter.task.Task;
 import com.sergeykotov.adapter.task.TaskDto;
 import com.sergeykotov.adapter.task.TaskResult;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 
 public class TaskQueueProcessing extends Thread {
-    private static final Logger log = Logger.getLogger(TaskQueueProcessing.class);
+    private static final Logger log = LoggerFactory.getLogger(TaskQueueProcessing.class);
     private static final String NAME = "task-queue-processing";
 
     private final BlockingQueue<Task> queue;
