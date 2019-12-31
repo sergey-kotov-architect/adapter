@@ -21,13 +21,12 @@ Web-service that provides REST API to manage business rules and its integrity on
 
 # Technologies and tools
 * Java 8
-* Spring framework (Boot, Web, Test, Actuator)
+* Spring framework (Boot, Web, Test, Actuator, slf4j/logback)
 * SQLite
 * JDBC
 * Apache DBCP (connection pooling framework)
 * Concurrency
 * Message Queue
-* Log4j
 * Maven
 * Git
 * IntelliJ IDEA
