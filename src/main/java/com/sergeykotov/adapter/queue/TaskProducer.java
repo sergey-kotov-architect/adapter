@@ -29,34 +29,33 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
-public class TaskQueue {
-    private static final Logger log = LoggerFactory.getLogger(TaskQueue.class);
+public class TaskProducer {
+    private static final Logger log = LoggerFactory.getLogger(TaskProducer.class);
     private static final int CAPACITY = Integer.MAX_VALUE;
     private static final AtomicLong idCounter = new AtomicLong(1);
 
     private final RuleService ruleService;
     private final IntegrityService integrityService;
     private final TaskResultDao taskResultDao;
-    private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>(CAPACITY);
-    private final TaskQueueProcessing taskQueueProcessing;
+    private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>(CAPACITY);
+    private final TaskConsumer taskConsumer;
 
     @Autowired
-    public TaskQueue(RuleService ruleService, IntegrityService integrityService, TaskResultDao taskResultDao) {
+    public TaskProducer(RuleService ruleService, IntegrityService integrityService, TaskResultDao taskResultDao) {
         this.ruleService = ruleService;
         this.integrityService = integrityService;
         this.taskResultDao = taskResultDao;
-        taskQueueProcessing = new TaskQueueProcessing(queue, taskResultDao);
-        taskQueueProcessing.start();
+        taskConsumer = new TaskConsumer(taskQueue, taskResultDao);
+        taskConsumer.start();
     }
 
     public TaskQueueDto getTaskQueueDto() {
-        List<TaskDto> tasks = queue.stream().map(Task::getTaskDto).collect(Collectors.toList());
-        TaskDto executingTaskDto = taskQueueProcessing.getExecutingTaskDto();
+        List<TaskDto> tasks = taskQueue.stream().map(Task::getTaskDto).collect(Collectors.toList());
 
         TaskQueueDto taskQueueDto = new TaskQueueDto();
         taskQueueDto.setCapacity(CAPACITY);
         taskQueueDto.setSize(tasks.size());
-        taskQueueDto.setExecutingTask(executingTaskDto);
+        taskConsumer.getExecutingTaskDto().ifPresent(taskQueueDto::setExecutingTask);
         taskQueueDto.setTasks(tasks);
         return taskQueueDto;
     }
@@ -122,11 +121,11 @@ public class TaskQueue {
     }
 
     private void submitTask(Task task) {
-        boolean accepted = queue.offer(task);
+        boolean accepted = taskQueue.offer(task);
         if (!accepted) {
             log.error("failed to submit task " + task);
             throw new TaskQueueException();
         }
-        log.info("task " + task + " has been submitted, queue size " + queue.size());
+        log.info("task " + task + " has been submitted, taskQueue size " + taskQueue.size());
     }
 }

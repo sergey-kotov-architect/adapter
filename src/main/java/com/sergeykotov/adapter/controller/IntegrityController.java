@@ -2,7 +2,7 @@ package com.sergeykotov.adapter.controller;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.dto.IntegrityDto;
-import com.sergeykotov.adapter.queue.TaskQueue;
+import com.sergeykotov.adapter.queue.TaskProducer;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.IntegrityService;
 import com.sergeykotov.adapter.task.TaskDto;
@@ -16,15 +16,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/integrity")
 public class IntegrityController {
-    private final TaskQueue taskQueue;
+    private final TaskProducer taskProducer;
     private final AuthorizationService authorizationService;
     private final IntegrityService integrityService;
 
     @Autowired
-    public IntegrityController(TaskQueue taskQueue,
+    public IntegrityController(TaskProducer taskProducer,
                                AuthorizationService authorizationService,
                                IntegrityService integrityService) {
-        this.taskQueue = taskQueue;
+        this.taskProducer = taskProducer;
         this.authorizationService = authorizationService;
         this.integrityService = integrityService;
     }
@@ -39,6 +39,6 @@ public class IntegrityController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto restoreIntegrity(@RequestHeader String authorization, @RequestBody @Valid List<Rule> rules) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitRestoreIntegrityTask(rules);
+        return taskProducer.submitRestoreIntegrityTask(rules);
     }
 }

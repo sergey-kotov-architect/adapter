@@ -2,7 +2,7 @@ package com.sergeykotov.adapter.controller;
 
 import com.sergeykotov.adapter.domain.Rule;
 import com.sergeykotov.adapter.exception.NotFoundException;
-import com.sergeykotov.adapter.queue.TaskQueue;
+import com.sergeykotov.adapter.queue.TaskProducer;
 import com.sergeykotov.adapter.service.AuthorizationService;
 import com.sergeykotov.adapter.service.RuleService;
 import com.sergeykotov.adapter.task.TaskDto;
@@ -16,13 +16,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/rule")
 public class RuleController {
-    private final TaskQueue taskQueue;
+    private final TaskProducer taskProducer;
     private final AuthorizationService authorizationService;
     private final RuleService ruleService;
 
     @Autowired
-    public RuleController(TaskQueue taskQueue, AuthorizationService authorizationService, RuleService ruleService) {
-        this.taskQueue = taskQueue;
+    public RuleController(TaskProducer taskProducer, AuthorizationService authorizationService, RuleService ruleService) {
+        this.taskProducer = taskProducer;
         this.authorizationService = authorizationService;
         this.ruleService = ruleService;
     }
@@ -43,20 +43,20 @@ public class RuleController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto createRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitCreateRuleTask(rule);
+        return taskProducer.submitCreateRuleTask(rule);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto updateRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitUpdateRuleTask(rule);
+        return taskProducer.submitUpdateRuleTask(rule);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TaskDto deleteRule(@RequestHeader String authorization, @RequestBody @Valid Rule rule) {
         authorizationService.authorize(authorization);
-        return taskQueue.submitDeleteRuleTask(rule);
+        return taskProducer.submitDeleteRuleTask(rule);
     }
 }
